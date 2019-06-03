@@ -17,4 +17,9 @@
 //   { name: 'React', isActive: true, members: 500 },
 // ];
 
-// function membersOnActiveMeetups(meetups) {}
+export const membersOnActiveMeetups = (meetups) => {
+  return meetups.reduce(
+    (accValue, {isActive, members}) => {
+      return  isActive ? accValue + members : accValue;
+    }, 0);
+};
