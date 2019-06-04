@@ -14,14 +14,14 @@
  * generator.next(); -> 'Complete!'
  */
 
-export const createGenerator = (arr) => {
+export const createGenerator = arr => {
   const COMPLETE_MESSAGE = 'Complete!';
-  let itr = arr[Symbol.iterator]();
+  const itr = arr[Symbol.iterator]();
 
   return {
     next() {
-      const currValue = itr.next();
-      return !currValue.done ? currValue.value : COMPLETE_MESSAGE;
-    }
+      const { done: currStatus, value: currValue } = itr.next();
+      return !currStatus ? currValue : COMPLETE_MESSAGE;
+    },
   };
 };

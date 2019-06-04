@@ -29,12 +29,12 @@ export function task6Old() {
 // При желании, можете использовать стрелочную функцию, вместо обычной
 
 export const task6New = () => {
-  let {
-    name,
-    value,
-    role: {name: role},
-    isActive: isActive = false,
-    cases: [{ id: firstCaseId }]
+  const {
+    name: userName,
+    value: userValue,
+    role: { name: userRoleName },
+    isActive: userActiveStatus = false,
+    cases: [{ id: userFirstCaseId }],
   } = (() => ({
     name: 'Max',
     value: 100,
@@ -42,5 +42,5 @@ export const task6New = () => {
     cases: [{ id: '1' }],
   }))();
 
-  return [name, value, role, isActive, firstCaseId];
+  return [userName, userValue, userRoleName, userActiveStatus, userFirstCaseId];
 };

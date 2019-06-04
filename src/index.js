@@ -90,62 +90,75 @@ console.log('=============');
 console.log('=============ARRAY-PRACTICE=============');
 console.log('=============');
 
-console.log('task1 any([1,2,3,4,5])', any([1,2,3,4,5]));
-console.log('task1 any([1,2,3,4,5], x => x >= 3)', any([1,2,3,4,5], x => x >= 3));
-console.log('task1 any([1,2,3,4,5], x => x >= 10)', any([1,2,3,4,5], x => x >= 10));
+console.log('task1 any([1,2,3,4,5])', any([1, 2, 3, 4, 5]));
+console.log('task1 any([1,2,3,4,5], x => x >= 3)', any([1, 2, 3, 4, 5], x => x >= 3));
+console.log('task1 any([1,2,3,4,5], x => x >= 10)', any([1, 2, 3, 4, 5], x => x >= 10));
 
 console.log('=============');
 
-console.log('arrayDiff([1, 2, 3], [1, 2, 4])', arrayDiff([1, 2, 3], [1, 2, 4]));
-console.log('arrayDiff([1, 3, 3, 4], [1, 3, \'4\'])', arrayDiff([1, 3, 3, 4], [1, 3, '4']));
+console.log('task2 arrayDiff([1, 2, 3], [1, 2, 4])', arrayDiff([1, 2, 3], [1, 2, 4]));
+console.log("task2 arrayDiff([1, 3, 3, 4], [1, 3, '4'])", arrayDiff([1, 3, 3, 4], [1, 3, '4']));
 
 console.log('=============');
 
-console.log('forEachRight([1, 2, 3, 4], val => console.log(val))', forEachRight([1, 2, 3, 4], val => console.log(val)));
+console.log(
+  'task3 forEachRight([1, 2, 3, 4], val => console.log(val))',
+  forEachRight([1, 2, 3, 4], val => console.log(val))
+);
 
 console.log('=============');
 
-console.log('union([5, 1, 2, 3, 3], [4, 3, 2])', union([5, 1, 2, 3, 3], [4, 3, 2]));  // [5, 1, 2, 3, 4]
-console.log('union([5, 1, 3, 3, 4], [1, 3, 4])', union([5, 1, 3, 3, 4], [1, 3, 4]));  // [5, 1, 3, 4]
+console.log('task4 union([5, 1, 2, 3, 3], [4, 3, 2])', union([5, 1, 2, 3, 3], [4, 3, 2])); // [5, 1, 2, 3, 4]
+console.log('task4 union([5, 1, 3, 3, 4], [1, 3, 4])', union([5, 1, 3, 3, 4], [1, 3, 4])); // [5, 1, 3, 4]
 
 console.log('=============');
 
-console.log('const generator = createGenerator([1, \'6\', 3, 2])');
+console.log("task5 const generator = createGenerator([1, '6', 3, 2])");
 const generator = createGenerator([1, '6', 3, 2]);
-console.log(generator.next());         // 1
-console.log(generator.next());         // '6'
-console.log(generator.next());         // 3
-console.log(generator.next());         // 2
-console.log(generator.next());         // 'Complete!'
-console.log(generator.next());         // 'Complete!'
+console.log(generator.next()); // 1
+console.log(generator.next()); // '6'
+console.log(generator.next()); // 3
+console.log(generator.next()); // 2
+console.log(generator.next()); // 'Complete!'
+console.log(generator.next()); // 'Complete!'
 
 console.log('=============');
 
-console.log('transformArrayToNumber([10, 20, 30], (acc, item) => acc + item)',
-             transformArrayToNumber([10, 20, 30], (acc, item) => acc + item));        // 60
-console.log('transformArrayToNumber([10, 20, 30], (acc, item) => acc + item, 10)',
-             transformArrayToNumber([10, 20, 30], (acc, item) => acc + item, 10));    // 70
-console.log('transformArrayToNumber([10, 20, 30], (acc, item) => acc * item)',
-             transformArrayToNumber([10, 20, 30], (acc, item) => acc * item));        // 0
-console.log('transformArrayToNumber([10, 20, 30], (acc, item) => acc * item, 1)',
-             transformArrayToNumber([10, 20, 30], (acc, item) => acc * item, 1));     // 6000
-console.log('transformArrayToNumber([10, 20, 30], (acc, item) => acc - item)',
-             transformArrayToNumber([10, 20, 30], (acc, item) => acc - item));        // -60
+console.log(
+  'task6 transformArrayToNumber([10, 20, 30], (acc, item) => acc + item)',
+  transformArrayToNumber([10, 20, 30], (acc, item) => acc + item)
+); // 60
+console.log(
+  'task6 transformArrayToNumber([10, 20, 30], (acc, item) => acc + item, 10)',
+  transformArrayToNumber([10, 20, 30], (acc, item) => acc + item, 10)
+); // 70
+console.log(
+  'task6 transformArrayToNumber([10, 20, 30], (acc, item) => acc * item)',
+  transformArrayToNumber([10, 20, 30], (acc, item) => acc * item)
+); // 0
+console.log(
+  'task6 transformArrayToNumber([10, 20, 30], (acc, item) => acc * item, 1)',
+  transformArrayToNumber([10, 20, 30], (acc, item) => acc * item, 1)
+); // 6000
+console.log(
+  'task6 transformArrayToNumber([10, 20, 30], (acc, item) => acc - item)',
+  transformArrayToNumber([10, 20, 30], (acc, item) => acc - item)
+); // -60
 
 console.log('=============');
 
-console.log('take([1, 2, 3], 5)', take([1, 2, 3], 5));      // [1, 2, 3]
-console.log('take([1, 2, 3], 2)', take([1, 2, 3], 2));      // [1, 2]
+console.log('task7 take([1, 2, 3], 5)', take([1, 2, 3], 5)); // [1, 2, 3]
+console.log('task7 take([1, 2, 3], 2)', take([1, 2, 3], 2)); // [1, 2]
 
 console.log('=============');
 
-console.log('without([2, 1, 2, 3], 1, 2)', without([2, 1, 2, 3], 1, 2));            // [3]
-console.log('without([2, 1, 10, 20], 1, 2)', without([2, 1, 10, 20], 1, 2));        // [10, 20]
+console.log('task8 without([2, 1, 2, 3], 1, 2)', without([2, 1, 2, 3], 1, 2)); // [3]
+console.log('task8 without([2, 1, 10, 20], 1, 2)', without([2, 1, 10, 20], 1, 2)); // [10, 20]
 
 console.log('=============');
 
-console.log('indexOfAll([1, 2, 3, 1, 2, 3], 1)', indexOfAll([1, 2, 3, 1, 2, 3], 1));  // [0, 3]
-console.log('indexOfAll([1, 2, 3], 4)', indexOfAll([1, 2, 3], 4));                    // []
+console.log('task9 indexOfAll([1, 2, 3, 1, 2, 3], 1)', indexOfAll([1, 2, 3, 1, 2, 3], 1)); // [0, 3]
+console.log('task9 indexOfAll([1, 2, 3], 4)', indexOfAll([1, 2, 3], 4)); // []
 
 console.log('=============');
 const meetups = [
@@ -155,4 +168,4 @@ const meetups = [
   { name: 'React', isActive: true, members: 500 },
 ];
 
-console.log('membersOnActiveMeetups(meetups)', membersOnActiveMeetups(meetups));
+console.log('task10 membersOnActiveMeetups(meetups)', membersOnActiveMeetups(meetups));

@@ -11,10 +11,9 @@
  * console.log(indexOfAll([1, 2, 3], 4)); -> []
  */
 
-
 export const indexOfAll = (arr, findValue) => {
   return arr.reduce((accArray, currValue, currIndex) => {
-    if(findValue === currValue){
+    if (findValue === currValue) {
       accArray.push(currIndex);
     }
     return accArray;

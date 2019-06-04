@@ -13,5 +13,5 @@
  */
 
 export const take = (arr, amount) => {
-  return arr.slice( 0, (amount < 0 ? 0 : amount) );
+  return arr.slice(0, amount < 0 ? 0 : amount);
 };

@@ -29,11 +29,12 @@ export function task8Old() {
 // При желании, можете использовать стрелочную функцию, вместо обычной
 
 export const task8New = () => {
-  var obj = {
+  const obj = {
     nums: [0, 2, 5, 10, 15],
     fives: [],
     calculateNumsFive() {
-      return this.fives = this.nums.filter( (x) => x % 5 === 0 );
+      this.fives = this.nums.filter(x => x % 5 === 0);
+      return this.fives;
     },
   };
 

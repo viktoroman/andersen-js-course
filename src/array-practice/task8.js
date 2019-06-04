@@ -13,5 +13,5 @@
  */
 
 export const without = (arr, ...excValues) => {
-  return arr.filter((v) => !excValues.includes(v));
+  return arr.filter(v => !excValues.includes(v));
 };

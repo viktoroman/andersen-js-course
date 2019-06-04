@@ -17,8 +17,7 @@
  */
 
 export const arrayDiff = (fstArray, sndArray) => {
-  const arrayFilter = (arr1, arr2) => arr1.filter( (x) => !arr2.includes(x) );
+  const arrayFilter = (arr1, arr2) => arr1.filter(x => !arr2.includes(x));
 
-  return arrayFilter(fstArray, sndArray)
-    .concat(arrayFilter(sndArray, fstArray));
+  return arrayFilter(fstArray, sndArray).concat(arrayFilter(sndArray, fstArray));
 };
