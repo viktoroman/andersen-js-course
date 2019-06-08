@@ -16,6 +16,5 @@
  */
 
 export const any = (arr, cb) => {
-  if (typeof cb === 'function') return arr.some(cb);
-  return arr.some(x => x);
+  return arr.some(typeof cb === 'function' ? cb : x => x);
 };

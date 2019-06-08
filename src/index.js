@@ -90,7 +90,14 @@ console.log('=============');
 console.log('=============ARRAY-PRACTICE=============');
 console.log('=============');
 
-console.log('task1 any([1,2,3,4,5])', any([1, 2, 3, 4, 5]));
+console.log(
+  'task1 any([false, 0, "", null, undefined, NaN, 1, 2])',
+  any([false, 0, '', null, undefined, NaN, 1, 2])
+);
+console.log(
+  'task1 any([false, 0, "", null, undefined, NaN]])',
+  any([false, 0, '', null, undefined, NaN])
+);
 console.log('task1 any([1,2,3,4,5], x => x >= 3)', any([1, 2, 3, 4, 5], x => x >= 3));
 console.log('task1 any([1,2,3,4,5], x => x >= 10)', any([1, 2, 3, 4, 5], x => x >= 10));
 
