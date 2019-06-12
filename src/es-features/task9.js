@@ -17,4 +17,6 @@ export function task9Old() {
 // Напишите реализацию функции task9Old на ES6+ ниже этого комментария.
 // При желании, можете использовать стрелочную функцию, вместо обычной
 
-export function task9New() {}
+export const task9New = () => {
+  return ['test'.includes('est'), [22, 1, 90, 70].find(x => x < 3)];
+};

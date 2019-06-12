@@ -14,3 +14,7 @@
  * console.log(any([0, 0, 1, 0])); -> true
  * console.log(any([0, 0, 0, 0])); -> false
  */
+
+export const any = (arr, cb) => {
+  return arr.some(typeof cb === 'function' ? cb : x => x);
+};
