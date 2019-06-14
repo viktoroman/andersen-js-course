@@ -3,7 +3,7 @@ import EventEmitter from './EventEmitter';
 class Entity extends EventEmitter {
   constructor(type, name, description) {
     super();
-    this.id = Date.now() + Math.random();
+    this.id = Math.round(Date.now() * 1000 + Math.random() * 1000);
     this.type = type;
     this.name = name;
     this.description = description;
