@@ -1,44 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Andersen JS Course</title>
   </head>
   <body>
-  <main>
-    <div id="inventory">
-      <div class="title"><p>Recipes</p></div>
-      <div id="recipe-inventory" class="container"></div>
-      <div class="title"><p>Basic items</p></div>
-      <div id="item-inventory" class="container"></div>
-    </div>
-
-    <div id="tools">
-      <div></div><!--space-->
-      <div class="craft-tool-container">
-        <button id="btn-craft-item" >Craft ITEM</button>
+    <main>
+      <div id="inventory">
+        <div class="title"><p>Recipes</p></div>
+        <div id="recipe-inventory" class="container"></div>
+        <div class="title"><p>Basic items</p></div>
+        <div id="item-inventory" class="container"></div>
       </div>
-      <div class="craft-tool-container">
-        <input id="new-recipe-name" type=text placeholder="Name of a new recipe">
-        <textarea id="new-recipe-description" placeholder="Description of a new recipe" rows="4"></textarea>
-        <button id="btn-craft-recipe">Craft RECIPE</button>
+
+      <div id="tools">
+        <div></div>
+        <!--space-->
+        <div class="craft-tool-container">
+          <button id="btn-craft-item">Craft ITEM</button>
+        </div>
+        <div class="craft-tool-container">
+          <input id="new-recipe-name" type="text" placeholder="Name of a new recipe" />
+          <textarea
+            id="new-recipe-description"
+            placeholder="Description of a new recipe"
+            rows="4"
+          ></textarea>
+          <button id="btn-craft-recipe">Craft RECIPE</button>
+        </div>
       </div>
-    </div>
 
-    <div id="crafting-table">
-      <div class="title"><p>Crafting table</p></div>
-      <div class="subtitle"><p>Drag recipe here</p></div>
-      <div id="recipe-container" class="container"></div>
-      <div class="subtitle"><p>Drag items here</p></div>
-      <div id="item-container" class="container"></div>
-    </div>
-  </main>
+      <div id="crafting-table">
+        <div class="title"><p>Crafting table</p></div>
+        <div class="subtitle"><p>Drag recipe here</p></div>
+        <div id="recipe-container" class="container"></div>
+        <div class="subtitle"><p>Drag items here</p></div>
+        <div id="item-container" class="container"></div>
+      </div>
+    </main>
 
-  <footer>
-    <div class="subtitle"><p>MESSAGES</p></div>
-    <textarea id="message-log" rows="4" cols="100"></textarea>
-  </footer>
+    <footer>
+      <div class="subtitle"><p>MESSAGES</p></div>
+      <textarea id="message-log" rows="4" cols="100"></textarea>
+    </footer>
   </body>
 </html>
