@@ -53,9 +53,9 @@ class ViewCraftSpace extends EventEmitter {
         eventMessage: Utility.eventMessages.CRAFTTABLE_DROP_RECIPE,
       },
     ].forEach(({ elem, transferDataType, eventMessage }) => {
-      elem.addEventListener('dragover', this.allowDrop);
+      elem.addEventListener('dragover', this.handlerAllowDrop);
       elem.addEventListener('drop', ev => {
-        this.dropItemInventory(ev, transferDataType, eventMessage);
+        this.handlerDropEntity(ev, elem, transferDataType, eventMessage);
       });
     });
 
@@ -63,45 +63,93 @@ class ViewCraftSpace extends EventEmitter {
     // listener for button create recipe !!!
   }
 
-  allowDrop(ev) {
+  // handler
+  // allow drop into container
+  handlerAllowDrop(ev) {
     ev.preventDefault();
   }
 
-  // drop
-  dropItemInventory(ev, transferDataType /* , eventMessage */) {
-    ev.preventDefault();
-    const item = document.getElementById(ev.dataTransfer.getData(transferDataType));
-    if (!item) return;
-    ev.target.appendChild(item);
-    // ADD emit !!!
+  // handler
+  // keep id of draggable element during dragging
+  handlerDragEntity(ev, transferDataType) {
+    ev.dataTransfer.setData(transferDataType, ev.target.id);
   }
 
-  // add item to inventory container
-  addItem({ id, name }) {
-    this.appendEntity(this.itemInventory, this.createItem(id, name));
+  // handler
+  // append draggable element into container at the moment of dropping element
+  handlerDropEntity(ev, parent, transferDataType, eventMessage) {
+    ev.preventDefault();
+
+    const id = ev.dataTransfer.getData(transferDataType);
+    const item = document.getElementById(id);
+    if (!(item && parent)) return;
+    parent.appendChild(item);
+
+    this.emit(eventMessage, id);
+  }
+
+  // create and add new Item
+  addItem({ id: entityId, name: entityName }) {
+    const element = this.createElement({
+      tag: 'div',
+      attributes: {
+        id: entityId,
+        class: this.CONSTANTS.CLASS_ITEM,
+        draggable: true,
+      },
+      textContent: entityName,
+      handles: {
+        dragstart: ev => {
+          this.handlerDragEntity(ev, this.CONSTANTS.TYPE_ITEM);
+        },
+      },
+    });
+
+    if (!element) return;
+    this.appendEntity(this.itemInventory, element);
+  }
+
+  // create and add new Recipe
+  addRecipe({ id: entityId, name: entityName }) {
+    const element = this.createElement({
+      tag: 'div',
+      attributes: {
+        id: entityId,
+        class: this.CONSTANTS.CLASS_RECIPE,
+        draggable: true,
+      },
+      textContent: entityName,
+      handles: {
+        dragstart: ev => {
+          this.handlerDragEntity(ev, this.CONSTANTS.TYPE_RECIPE);
+        },
+      },
+    });
+
+    if (!element) return;
+    this.appendEntity(this.recipeInventory, element);
+  }
+
+  // create new html-element with the help of properties
+  createElement(props) {
+    if (!(props && props.tag)) return undefined;
+    const element = document.createElement(props.tag);
+    element.textContent = props.textContent;
+
+    Object.keys(props.attributes).forEach(attrName =>
+      element.setAttribute(attrName, props.attributes[attrName])
+    );
+
+    Object.keys(props.handles).forEach(handleName =>
+      element.addEventListener(handleName, props.handles[handleName])
+    );
+
+    return element;
   }
 
   // append element to parent element
   appendEntity(parent, child) {
     parent.appendChild(child);
-  }
-
-  // creation of element similar to item object
-  createItem(id, name) {
-    const element = document.createElement('div');
-    element.setAttribute('id', id);
-    element.setAttribute('class', this.CONSTANTS.CLASS_ITEM);
-    element.setAttribute('draggable', true);
-    element.textContent = name;
-    element.addEventListener('dragstart', ev => {
-      this.dragEntity(ev, this.CONSTANTS.TYPE_ITEM);
-    });
-
-    return element;
-  }
-
-  dragEntity(ev, transferDataType) {
-    ev.dataTransfer.setData(transferDataType, ev.target.id);
   }
 }
 
