@@ -21,23 +21,30 @@
         <div class="craft-tool-container">
           <button id="btn-craft-item">Craft ITEM</button>
         </div>
+
         <div class="craft-tool-container">
-          <input id="new-recipe-name" type="text" placeholder="Name of a new recipe" />
+          <input id="new-recipe-name" type="text" placeholder="New recipe name" />
           <textarea
             id="new-recipe-description"
-            placeholder="Description of a new recipe"
+            placeholder="New recipe description"
             rows="4"
           ></textarea>
           <button id="btn-craft-recipe">Craft RECIPE</button>
+          <input id="new-item-name" type="text" placeholder="New item name" />
+          <textarea
+            id="new-item-description"
+            placeholder="New item description"
+            rows="4"
+          ></textarea>
         </div>
       </div>
 
-      <div id="crafting-table">
+      <div id="craft-table">
         <div class="title"><p>Crafting table</p></div>
         <div class="subtitle"><p>Drag recipe here</p></div>
-        <div id="recipe-container" class="container"></div>
+        <div id="recipe-craft-table" class="container"></div>
         <div class="subtitle"><p>Drag items here</p></div>
-        <div id="item-container" class="container"></div>
+        <div id="item-craft-table" class="container"></div>
       </div>
     </main>
 
