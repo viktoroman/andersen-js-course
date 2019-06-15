@@ -1,3 +1,6 @@
+import Item from '../model/Item';
+import Recipe from '../model/Recipe';
+
 // support object
 const Utility = (() => {
   const utilityEventMessages = {
@@ -15,13 +18,35 @@ const Utility = (() => {
   };
 
   // One instance
-  const utilityDefaultEntityDescription = {
-    itemName: 'Item description',
+  const utilityDefaultEntities = {
+    item: {
+      wood: new Item('Wood', 'Wood'),
+      iron: new Item('Iron', 'Iron'),
+      glass: new Item('Glass', 'Glass'),
+      textile: new Item('Textile', 'Textile'),
+    },
+    recipe: {
+      chair: new Recipe(
+        'Chair',
+        'Chair',
+        new Item('Chair', 'Chair'),
+        new Item('Wood', 'Wood'),
+        new Item('Iron', 'Iron')
+      ),
+      table: new Recipe(
+        'Table',
+        'Table',
+        new Item('Table', 'Table'),
+        new Item('Wood', 'Wood'),
+        new Item('Wood', 'Wood'),
+        new Item('Iron', 'Iron')
+      ),
+    },
   };
 
   return {
     eventMessages: utilityEventMessages,
-    defaultEntityDescription: utilityDefaultEntityDescription,
+    defaultEntities: utilityDefaultEntities,
   };
 })();
 
