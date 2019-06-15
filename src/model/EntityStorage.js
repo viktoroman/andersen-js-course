@@ -6,10 +6,11 @@ class EntityStorage {
   }
 
   add(...entities) {
+    if (!entities) return;
     entities.filter(value => Boolean(value));
     if (entities.length === 0) return;
 
-    this.storage.add(...entities);
+    entities.forEach(entity => this.storage.set(entity.getId(), entity));
   }
 
   // return true/false
