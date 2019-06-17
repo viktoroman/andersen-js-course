@@ -17,23 +17,23 @@ const Utility = (() => {
     MESSAGE: 'MESSAGE',
   };
 
-  // One instance
+  // set of
   const utilityDefaultEntities = {
-    item: {
-      wood: new Item('Wood', 'Wood'),
-      iron: new Item('Iron', 'Iron'),
-      glass: new Item('Glass', 'Glass'),
-      textile: new Item('Textile', 'Textile'),
-    },
-    recipe: {
-      chair: new Recipe(
+    item: [
+      new Item('Wood', 'Wood'),
+      new Item('Iron', 'Iron'),
+      new Item('Glass', 'Glass'),
+      new Item('Textile', 'Textile'),
+    ],
+    recipe: [
+      new Recipe(
         'Chair',
         'Chair',
         new Item('Chair', 'Chair'),
         new Item('Wood', 'Wood'),
         new Item('Iron', 'Iron')
       ),
-      table: new Recipe(
+      new Recipe(
         'Table',
         'Table',
         new Item('Table', 'Table'),
@@ -41,7 +41,7 @@ const Utility = (() => {
         new Item('Wood', 'Wood'),
         new Item('Iron', 'Iron')
       ),
-    },
+    ],
   };
 
   return {
