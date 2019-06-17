@@ -2,9 +2,7 @@ import Entity from './Entity';
 
 class Recipe extends Entity {
   constructor(name, description, craftedItem, ...components) {
-    const TYPE = 'recipe';
-
-    super(TYPE, name, description);
+    super(Recipe.getType(), name, description);
 
     this.craftedItem = craftedItem;
     this.components = components;
@@ -15,6 +13,10 @@ class Recipe extends Entity {
         return arr;
       }, [])
       .join('; ');
+  }
+
+  static getType() {
+    return 'recipe';
   }
 
   getCraftedItem() {
