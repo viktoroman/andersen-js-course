@@ -1,16 +1,13 @@
 class EntityStorage {
-  constructor(...entities) {
+  constructor() {
     this.storage = new Map();
-
-    this.add(...entities);
   }
 
-  add(...entities) {
-    if (!entities) return;
-    entities.filter(value => Boolean(value));
-    if (entities.length === 0) return;
-
-    entities.forEach(entity => this.storage.set(entity.getId(), entity));
+  // add entity, return true/false
+  add(entity) {
+    if (!entity) return false;
+    this.storage.set(entity.getId(), entity);
+    return true;
   }
 
   // return true/false
@@ -18,16 +15,43 @@ class EntityStorage {
     return this.storage.delete(entityId);
   }
 
-  // return true/false
-  delete(entity) {
-    return this.deleteById(entity.getId());
+  // delete by entity id, return true/false
+  delete({ id: entityId }) {
+    return this.deleteById(entityId);
   }
 
-  find(entity) {
-    const entityId = entity.getId();
-    if (!entityId) return entityId;
-
+  // find by entity id, return entity
+  findById(entityId) {
+    if (!entityId) return undefined;
     return this.storage.get(entityId);
+  }
+
+  // find all entities with the same type, name
+  findSame({ type: findEntityType, name: findEntityName }) {
+    return [...this.storage.values()].reduce((accumArr, entity) => {
+      if (findEntityType === entity.getType() && findEntityName === entity.getName()) {
+        accumArr.push();
+      }
+      return accumArr;
+    }, []);
+  }
+
+  // size of entities storage
+  size() {
+    return this.storage.size();
+  }
+
+  // has entity with this id
+  hasEntity(entity) {
+    return this.find(entity.getId()) !== undefined;
+  }
+
+  // has entity with this type, name
+  hasSameEntity({ type: findEntityType, name: findEntityName }) {
+    return [...this.storage.values()].some(
+      ({ type: entityType, name: entityName }) =>
+        findEntityType === entityType && findEntityName === entityName
+    );
   }
 }
 
