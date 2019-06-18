@@ -3,6 +3,11 @@ class EntityStorage {
     this.storage = new Map();
   }
 
+  // get all values
+  getAll() {
+    return [...this.storage.values()];
+  }
+
   // add entity, return true/false
   add(entity) {
     if (!entity) return false;
@@ -30,6 +35,16 @@ class EntityStorage {
   findSame({ type: findEntityType, name: findEntityName }) {
     return [...this.storage.values()].reduce((accumArr, entity) => {
       if (findEntityType === entity.getType() && findEntityName === entity.getName()) {
+        accumArr.push();
+      }
+      return accumArr;
+    }, []);
+  }
+
+  // find all entities ONLY with the same type
+  findSameType({ type: findEntityType }) {
+    return [...this.storage.values()].reduce((accumArr, entity) => {
+      if (findEntityType === entity.getType()) {
         accumArr.push();
       }
       return accumArr;
