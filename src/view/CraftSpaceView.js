@@ -144,6 +144,12 @@ class CraftSpaceView extends EventEmitter {
     this.deleteEntity(recipe);
   }
 
+  // delete element with id
+  deleteById(id) {
+    const entityElement = document.getElementById(id);
+    entityElement.parentNode.removeChild(entityElement);
+  }
+
   // create new html-element with the help of properties
   createElement(props) {
     if (!(props && props.tag)) return undefined;
@@ -185,12 +191,6 @@ class CraftSpaceView extends EventEmitter {
     return [...this.recipeCraftTable.querySelectorAll(`.${this.CONSTANTS.CLASS_RECIPE}`)].map(
       elem => elem.getAttribute('id')
     );
-  }
-
-  // delete element with id
-  deleteById(id) {
-    const entityElement = document.getElementById(id);
-    entityElement.parentNode.removeChild(entityElement);
   }
 }
 
