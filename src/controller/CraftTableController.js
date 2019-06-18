@@ -1,6 +1,4 @@
 import EventEmitter from '../model/EventEmitter';
-// import Item from '../model/Item';
-// import Recipe from '../model/Recipe';
 import EntityStorage from '../model/EntityStorage';
 import Utility from '../utility/Utility';
 import CraftSpaceView from '../view/CraftSpaceView';
@@ -16,14 +14,29 @@ class CraftSpaceController extends EventEmitter {
 
     this.entityCategories = {
       [`${Item.getType()}`]: {
+        // Inventory
         addToInventory: (...args) => {
           this.craftSpaceView.addItem(...args);
+        },
+        deleteFromInventory: (...args) => {
+          this.craftSpaceView.deleteItem(...args);
+        },
+        // Craft table
+        deleteFromCraftTable: (...args) => {
+          this.craftSpaceView.deleteItem(...args);
         },
       },
 
       [`${Recipe.getType()}`]: {
         addToInventory: (...args) => {
           this.craftSpaceView.addRecipe(...args);
+        },
+        deleteFromInventory: (...args) => {
+          this.craftSpaceView.deleteRecipe(...args);
+        },
+        // Craft table
+        deleteFromCraftTable: (...args) => {
+          this.craftSpaceView.deleteRecipe(...args);
         },
       },
     };
@@ -43,75 +56,117 @@ class CraftSpaceController extends EventEmitter {
       Utility.eventMessages.CRAFTTABLE_DROP_RECIPE,
       this.dropRecipeCraftTable.bind(this)
     );
-    // this.craftSpaceView.on(Utility.eventMessages.INVENTORY_DROP_RECIPE);
+    this.craftSpaceView.on(
+      Utility.eventMessages.INVENTORY_DROP_RECIPE,
+      this.dropRecipeInventory.bind(this)
+    );
   }
 
   initDefaultEntities() {
     [...Utility.defaultEntities.item, ...Utility.defaultEntities.recipe].forEach(entity =>
-      this.addToInventoryEntity(entity.clone())
+      this.addToInventoryNewEntity(entity.clone())
     );
   }
 
-  // put in inventory entity
-  addToInventoryEntity(entity) {
-    if (this.hasInventoryEntity(entity)) return;
-    this.inventoryStorage.add(entity);
+  // add to inventory (view)
+  addToInventory(entity) {
     this.entityCategories[entity.getType()].addToInventory(entity);
   }
 
-  hasInventoryEntity(entity) {
+  // add to inventory storage
+  addToInventoryStorage(entity) {
+    this.inventoryStorage.add(entity);
+  }
+
+  // delete from inventory (view)
+  deleteFromInventory(entity) {
+    this.entityCategories[entity.getType()].deleteFromInventory(entity);
+  }
+
+  // delete from inventory storage
+  deleteFromInventoryStorage(entity) {
+    this.inventoryStorage.delete(entity);
+  }
+
+  // add to craft table storage
+  addToCraftTableStorage(entity) {
+    this.craftTableStorage.add(entity);
+  }
+
+  // delete from craft table (view)
+  deleteFromCraftTable(entity) {
+    this.entityCategories[entity.getType()].deleteFromCraftTable(entity);
+  }
+
+  // delete from craft table (view)
+  deleteFromCraftTableStorage(entity) {
+    this.craftTableStorage.delete(entity);
+  }
+
+  hasInventoryStorage(entity) {
     return this.inventoryStorage.hasSameEntity(entity);
+  }
+
+  getRecipesFromCraftTableStorage() {
+    return this.craftTableStorage.getAll().filter(entity => entity.getType() === Recipe.getType());
+  }
+
+  // !!!
+  // put in inventory new entity
+  addToInventoryNewEntity(entity) {
+    if (this.hasInventoryStorage(entity)) return;
+    this.addToInventoryStorage(entity);
+    this.addToInventory(entity);
   }
 
   // ON LISTENERS
   // create copy of dragged item and put in inventory
   dropItemCraftTable(entityId) {
-    const id = Number(entityId);
-
-    const entityOriginal = this.inventoryStorage.findById(id);
+    const entityOriginal = this.inventoryStorage.findById(Number(entityId));
     if (!entityOriginal) return; // if undefined then it was dragging craft table --> craft table
 
     const itemCopy = entityOriginal.clone();
-    this.inventoryStorage.delete(entityOriginal);
-    this.craftTableStorage.add(entityOriginal);
-    this.addToInventoryEntity(itemCopy);
+    this.deleteFromInventoryStorage(entityOriginal);
+    this.addToCraftTableStorage(entityOriginal);
+
+    this.addToInventoryNewEntity(itemCopy);
   }
 
   // delete element when it come back to inventory from craft table
   dropItemInventory(entityId) {
-    const id = Number(entityId);
+    const entity = this.craftTableStorage.findById(Number(entityId));
+    if (!entity) return; // if undefined then it was dragging inventory -> inventory
 
-    if (this.inventoryStorage.findById(id)) return;
-    this.craftTableStorage.deleteById(Number(id));
-    this.craftSpaceView.deleteById(id);
+    this.deleteFromCraftTableStorage(entity);
+    this.deleteFromInventory(entity); // element already in inventory after dragging
   }
 
   // move back to inventory old recipe from slot and add new dragged recipe
   dropRecipeCraftTable(entityId) {
-    const id = Number(entityId);
-
-    const entityOriginal = this.inventoryStorage.findById(id);
+    const entityOriginal = this.inventoryStorage.findById(Number(entityId));
     if (!entityOriginal) return; // if undefined then it was dragging craft table --> craft table
 
-    // old recipes (still in the slot of the craft table)..
-    const oldRecipesId = this.craftSpaceView.getCraftTableRecipesID().reduce((accum, recipeId) => {
-      if (Number(recipeId) === id) return accum;
-      accum.push(Number(recipeId));
-      return accum;
-    }, []);
-
+    // all old recipes..
+    const oldRecipes = this.getRecipesFromCraftTableStorage();
     // ..must go back to inventory
-    oldRecipesId.forEach(recipeId => {
-      const recipe = this.craftTableStorage.findById(Number(recipeId));
-      if (!recipe) return;
-      this.craftTableStorage.delete(recipe);
-      this.inventoryStorage.add(recipe);
-      this.craftSpaceView.deleteRecipe(recipe);
-      this.craftSpaceView.addRecipe(recipe);
+    oldRecipes.forEach(oldRecipe => {
+      this.deleteFromCraftTableStorage(oldRecipe);
+      this.addToInventoryStorage(oldRecipe);
+
+      this.deleteFromCraftTable(oldRecipe);
+      this.addToInventory(oldRecipe);
     });
 
-    this.inventoryStorage.delete(entityOriginal);
-    this.craftTableStorage.add(entityOriginal);
+    this.deleteFromInventoryStorage(entityOriginal);
+    this.addToCraftTableStorage(entityOriginal);
+  }
+
+  // drop recipe to inventory
+  dropRecipeInventory(entityId) {
+    const entity = this.craftTableStorage.findById(Number(entityId));
+    if (!entity) return; // if undefined then it was dragging inventory --> inventory
+    this.deleteFromCraftTableStorage(entity);
+    this.addToInventoryStorage(entity);
   }
 }
 
