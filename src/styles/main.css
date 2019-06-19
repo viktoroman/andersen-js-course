@@ -13,9 +13,6 @@ main {
   grid-template-columns: 400px 250px 400px;
 }
 
-footer {
-}
-
 #inventory,
 #craft-table {
   border: solid 4px #a5a5a5;
@@ -115,6 +112,7 @@ button:active {
 }
 
 textarea#new-recipe-description,
-textarea#new-item-description {
+textarea#new-item-description,
+textarea#description-info {
   resize: none;
 }
