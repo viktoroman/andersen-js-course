@@ -2,7 +2,7 @@ import Entity from './Entity';
 
 class Recipe extends Entity {
   constructor(name, description, craftedItem, ...components) {
-    super(Recipe.getType(), name, description);
+    super(Recipe.TYPE, name, description);
 
     this.craftedItem = craftedItem;
     this.components = components;
@@ -15,8 +15,17 @@ class Recipe extends Entity {
       .join('; ');
   }
 
-  static getType() {
+  static get TYPE() {
     return 'recipe';
+  }
+
+  static get MATCHING() {
+    return {
+      MATCH: 0b00,
+      EXCESS: 0b10,
+      MISSING: 0b01,
+      EXCESS_AND_MISSING: 0b11,
+    };
   }
 
   getCraftedItem() {
@@ -32,7 +41,9 @@ class Recipe extends Entity {
   }
 
   getInformation() {
-    return `${this.getType()}: ${this.getName()}. Components: ${this.getComponentsDescription()}. Description: ${this.getDescription()}.`;
+    return (str => str.slice(0, 1).toUpperCase() + str.slice(1))(
+      `${this.getType()}: ${this.getName()}. Components: ${this.getComponentsDescription()}. Description: ${this.getDescription()}.`
+    );
   }
 
   static toMetadataView(...items) {
@@ -49,7 +60,20 @@ class Recipe extends Entity {
     );
 
     // missing items aren't exist, extra items aren't exist
-    return [...comparisonResult.values()].every(value => value === 0);
+    // return [...comparisonResult.values()].every(value => value === 0);
+    const res = Recipe.MATCHING.MATCH;
+    return [...comparisonResult.values()].reduce((accum, value) => {
+      let mtch = Recipe.MATCHING.MATCH;
+      if (value === 0) {
+        mtch |= Recipe.MATCHING.MATCH;
+      } else if (value > 0) {
+        mtch |= Recipe.MATCHING.MISSING;
+      } else if (value < 0) {
+        mtch |= Recipe.MATCHING.EXCESS;
+      }
+
+      return accum | mtch;
+    }, res);
   }
 
   clone() {

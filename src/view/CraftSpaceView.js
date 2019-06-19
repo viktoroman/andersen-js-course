@@ -12,12 +12,15 @@ class CraftSpaceView extends EventEmitter {
     this.itemCraftTable = document.getElementById('item-craft-table');
 
     this.btnCraftItem = document.getElementById('btn-craft-item');
-
     this.btnCraftRecipe = document.getElementById('btn-craft-recipe');
+
     this.inputNewRecipeName = document.getElementById('new-recipe-name');
     this.inputNewRecipeDescr = document.getElementById('new-recipe-description');
     this.inputNewItemName = document.getElementById('new-item-name');
     this.inputNewItemDescr = document.getElementById('new-item-description');
+
+    this.messageField = document.getElementById('message-log');
+    this.descriptionField = document.getElementById('description-info');
 
     this.CONSTANTS = {
       CLASS_ITEM: 'item',
@@ -59,23 +62,24 @@ class CraftSpaceView extends EventEmitter {
       });
     });
 
-    // !!! listener for button create item
-    // !!! listener for button create recipe
+    // listener for button create item
+    this.btnCraftItem.addEventListener('click', this.handlerCraftNewItem.bind(this));
+
+    // listener for button create recipe
+    // this.btnCraftRecipe.addEventListener('click', this.handlerCraftNewRecipe.bind(this));
   }
 
-  // handler
+  // !!! HANDLERS
   // allow drop into container
   handlerAllowDrop(ev) {
     ev.preventDefault();
   }
 
-  // handler
   // keep id of draggable element during dragging
   handlerDragEntity(ev, transferDataType) {
     ev.dataTransfer.setData(transferDataType, ev.target.id);
   }
 
-  // handler
   // append draggable element into container at the moment of dropping element
   handlerDropEntity(ev, parent, transferDataType, eventMessage) {
     ev.preventDefault();
@@ -88,6 +92,17 @@ class CraftSpaceView extends EventEmitter {
     this.emit(eventMessage, id);
   }
 
+  // create new item with the help of recipe
+  handlerCraftNewItem() {
+    this.emit(Utility.eventMessages.CRAFT_ITEM);
+  }
+
+  // select entity -> show description
+  handlerSelectEntity(ev, eventMessage) {
+    this.emit(eventMessage, ev.target.id);
+  }
+
+  // !! ======================
   // create and add new Item
   addItem({ id: entityId, name: entityName }) {
     const element = this.createElement({
@@ -101,6 +116,9 @@ class CraftSpaceView extends EventEmitter {
       handles: {
         dragstart: ev => {
           this.handlerDragEntity(ev, this.CONSTANTS.TYPE_ITEM);
+        },
+        mousedown: ev => {
+          this.handlerSelectEntity(ev, Utility.eventMessages.SELECT_ENTITY);
         },
       },
     });
@@ -122,6 +140,10 @@ class CraftSpaceView extends EventEmitter {
       handles: {
         dragstart: ev => {
           this.handlerDragEntity(ev, this.CONSTANTS.TYPE_RECIPE);
+        },
+        // click: ev => {
+        mousedown: ev => {
+          this.handlerSelectEntity(ev, Utility.eventMessages.SELECT_ENTITY);
         },
       },
     });
@@ -191,6 +213,19 @@ class CraftSpaceView extends EventEmitter {
     return [...this.recipeCraftTable.querySelectorAll(`.${this.CONSTANTS.CLASS_RECIPE}`)].map(
       elem => elem.getAttribute('id')
     );
+  }
+
+  // !!! MESSAGES
+  showMessage(mess) {
+    // this.messageField.textContent = `${Utility.timeNow()}| ${mess}\n${
+    //   this.messageField.textContent
+    // }`;
+    this.messageField.textContent = `${Utility.timeNow()}| ${mess}`;
+  }
+
+  // show information (descrioption of entity)
+  showEntityInfo(descr) {
+    this.descriptionField.textContent = descr;
   }
 }
 

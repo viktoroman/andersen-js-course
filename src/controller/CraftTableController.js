@@ -13,7 +13,7 @@ class CraftSpaceController extends EventEmitter {
     this.craftSpaceView = new CraftSpaceView();
 
     this.entityCategories = {
-      [`${Item.getType()}`]: {
+      [`${Item.TYPE}`]: {
         // Inventory
         addToInventory: (...args) => {
           this.craftSpaceView.addItem(...args);
@@ -27,7 +27,7 @@ class CraftSpaceController extends EventEmitter {
         },
       },
 
-      [`${Recipe.getType()}`]: {
+      [`${Recipe.TYPE}`]: {
         addToInventory: (...args) => {
           this.craftSpaceView.addRecipe(...args);
         },
@@ -56,10 +56,17 @@ class CraftSpaceController extends EventEmitter {
       Utility.eventMessages.CRAFTTABLE_DROP_RECIPE,
       this.dropRecipeCraftTable.bind(this)
     );
+
     this.craftSpaceView.on(
       Utility.eventMessages.INVENTORY_DROP_RECIPE,
       this.dropRecipeInventory.bind(this)
     );
+
+    // Catch item crafting
+    this.craftSpaceView.on(Utility.eventMessages.CRAFT_ITEM, this.craftNewItem.bind(this));
+
+    // Catch entity select (click on element)
+    this.craftSpaceView.on(Utility.eventMessages.SELECT_ENTITY, this.selectEntity.bind(this));
   }
 
   initDefaultEntities() {
@@ -107,19 +114,41 @@ class CraftSpaceController extends EventEmitter {
     return this.inventoryStorage.hasSameEntity(entity);
   }
 
-  getRecipesFromCraftTableStorage() {
-    return this.craftTableStorage.getAll().filter(entity => entity.getType() === Recipe.getType());
+  // get recipes from craft table slot
+  // getRecipesFromCraftTableStorage() {
+  //   return this.craftTableStorage.getAll().filter(entity => entity.getType() === Recipe.TYPE);
+  // }
+
+  // get recipe from craft table slot
+  getRecipeFromCraftTableStorage() {
+    return this.craftTableStorage.getAll().find(entity => entity.getType() === Recipe.TYPE);
   }
 
-  // !!!
+  // get items from craft table slot
+  getItemsFromCraftTableStorage() {
+    return this.craftTableStorage.getAll().filter(entity => entity.getType() === Item.TYPE);
+  }
+
   // put in inventory new entity
   addToInventoryNewEntity(entity) {
-    if (this.hasInventoryStorage(entity)) return;
+    if (this.hasInventoryStorage(entity)) return false;
     this.addToInventoryStorage(entity);
     this.addToInventory(entity);
+    return true;
   }
 
-  // ON LISTENERS
+  // !!! MESSAGE TO VIEW
+  // Just message
+  showMessage(mess) {
+    this.craftSpaceView.showMessage(mess);
+  }
+
+  // Info
+  showEntityInfo(mess) {
+    this.craftSpaceView.showEntityInfo(mess);
+  }
+
+  // !!! ON LISTENERS
   // create copy of dragged item and put in inventory
   dropItemCraftTable(entityId) {
     const entityOriginal = this.inventoryStorage.findById(Number(entityId));
@@ -146,16 +175,15 @@ class CraftSpaceController extends EventEmitter {
     const entityOriginal = this.inventoryStorage.findById(Number(entityId));
     if (!entityOriginal) return; // if undefined then it was dragging craft table --> craft table
 
-    // all old recipes..
-    const oldRecipes = this.getRecipesFromCraftTableStorage();
+    // old recipe..
+    const oldRecipe = this.getRecipeFromCraftTableStorage();
     // ..must go back to inventory
-    oldRecipes.forEach(oldRecipe => {
+    if (oldRecipe) {
       this.deleteFromCraftTableStorage(oldRecipe);
       this.addToInventoryStorage(oldRecipe);
-
       this.deleteFromCraftTable(oldRecipe);
       this.addToInventory(oldRecipe);
-    });
+    }
 
     this.deleteFromInventoryStorage(entityOriginal);
     this.addToCraftTableStorage(entityOriginal);
@@ -167,6 +195,45 @@ class CraftSpaceController extends EventEmitter {
     if (!entity) return; // if undefined then it was dragging inventory --> inventory
     this.deleteFromCraftTableStorage(entity);
     this.addToInventoryStorage(entity);
+  }
+
+  // select entity
+  selectEntity(entityId) {
+    const entity =
+      this.inventoryStorage.findById(Number(entityId)) ||
+      this.craftTableStorage.findById(Number(entityId));
+    this.showEntityInfo(entity.getInformation());
+  }
+
+  // try to create new item with the help of recipe
+  craftNewItem() {
+    const recipe = this.getRecipeFromCraftTableStorage();
+    if (!recipe) {
+      this.showMessage('Recipe is missing'); // !!! message
+      return;
+    }
+
+    const craftedItem = recipe.getCraftedItem();
+    if (this.hasInventoryStorage(craftedItem)) {
+      this.showMessage('This item is already there!!'); // !!! message
+      return;
+    }
+
+    const items = this.getItemsFromCraftTableStorage();
+    if (!(items && items.length > 0)) {
+      this.showMessage('Items are missing'); // !!! message
+      return;
+    }
+
+    const matchResult = recipe.match(...items);
+    if (matchResult !== Recipe.MATCHING.MATCH) {
+      this.showMessage('Recipe is wrong!!'); // !!! ERROR message
+      // !!! clear craft table
+      return;
+    }
+    this.addToInventoryNewEntity(recipe.getCraftedItem());
+    // !!! clear Craft table
+    this.showMessage('New item is created'); // !!! Info mess
   }
 }
 

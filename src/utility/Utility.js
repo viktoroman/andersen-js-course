@@ -10,8 +10,7 @@ const Utility = (() => {
     CRAFTTABLE_DROP_RECIPE: 'CRAFTTABLE_DROP_RECIPE',
     INVENTORY_DROP_ITEM: 'INVENTORY_DROP_ITEM',
     INVENTORY_DROP_RECIPE: 'INVENTORY_DROP_RECIPE',
-    SELECT_ITEM: 'SELECT_ITEM',
-    SELECT_RECIPE: 'SELECT_RECIPE',
+    SELECT_ENTITY: 'SELECT_ENTITY',
     ERROR: 'ERROR',
     INFO: 'INFO',
     MESSAGE: 'MESSAGE',
@@ -47,6 +46,15 @@ const Utility = (() => {
   return {
     eventMessages: utilityEventMessages,
     defaultEntities: utilityDefaultEntities,
+    timeNow: () => {
+      const d = new Date();
+      const addZero = v => (v < 10 ? '0' : '') + v;
+
+      const h = addZero(d.getHours());
+      const m = addZero(d.getMinutes());
+      const s = addZero(d.getSeconds());
+      return `${h}:${m}:${s}`;
+    },
   };
 })();
 

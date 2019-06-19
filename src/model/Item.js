@@ -2,15 +2,17 @@ import Entity from './Entity';
 
 class Item extends Entity {
   constructor(name, description) {
-    super(Item.getType(), name, description);
+    super(Item.TYPE, name, description);
   }
 
-  static getType() {
+  static get TYPE() {
     return 'item';
   }
 
   getInformation() {
-    return `${this.getType()}: ${this.getName()}. Description: ${this.getDescription()}.`;
+    return (str => str.slice(0, 1).toUpperCase() + str.slice(1))(
+      `${this.getType()}: ${this.getName()}. Description: ${this.getDescription()}.`
+    );
   }
 
   clone() {
