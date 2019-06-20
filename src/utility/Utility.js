@@ -3,6 +3,7 @@ import Recipe from '../model/Recipe';
 
 // support object
 const Utility = (() => {
+  // messages for event handlers
   const utilityEventMessages = {
     CRAFT_ITEM: 'CRAFT_ITEM',
     CRAFT_RECIPE: 'CRAFT_RECIPE',
@@ -11,9 +12,18 @@ const Utility = (() => {
     INVENTORY_DROP_ITEM: 'INVENTORY_DROP_ITEM',
     INVENTORY_DROP_RECIPE: 'INVENTORY_DROP_RECIPE',
     SELECT_ENTITY: 'SELECT_ENTITY',
-    ERROR: 'ERROR',
-    INFO: 'INFO',
-    MESSAGE: 'MESSAGE',
+  };
+
+  // UI messages
+  const utilityUIMessages = {
+    EMPTY_INPUTS: 'Fill all inputs!!',
+    RECIPE_MISSING: 'Recipe is missing!!',
+    ITEMS_MISSING: 'Items are missing!!',
+    ITEM_ALREADY_EXISTS: 'This item is already there!!',
+    RECIPE_ALREADY_EXISTS: 'This recipe is already there!!',
+    RECIPE_WRONG: 'Recipe is wrong!!',
+    ITEM_CRAFTED: 'New item is created!!',
+    RECIPE_CRAFTED: 'New recipe is created!!',
   };
 
   // set of
@@ -25,16 +35,8 @@ const Utility = (() => {
       new Item('Textile', 'Textile'),
     ],
     recipe: [
+      new Recipe(new Item('Chair', 'Chair'), new Item('Wood', 'Wood'), new Item('Iron', 'Iron')),
       new Recipe(
-        'Chair',
-        'Chair',
-        new Item('Chair', 'Chair'),
-        new Item('Wood', 'Wood'),
-        new Item('Iron', 'Iron')
-      ),
-      new Recipe(
-        'Table',
-        'Table',
         new Item('Table', 'Table'),
         new Item('Wood', 'Wood'),
         new Item('Wood', 'Wood'),
@@ -46,6 +48,7 @@ const Utility = (() => {
   return {
     eventMessages: utilityEventMessages,
     defaultEntities: utilityDefaultEntities,
+    UIMessages: utilityUIMessages,
     timeNow: () => {
       const d = new Date();
       const addZero = v => (v < 10 ? '0' : '') + v;
