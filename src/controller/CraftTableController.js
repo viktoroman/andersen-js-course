@@ -41,6 +41,10 @@ class CraftSpaceController extends EventEmitter {
       },
     };
 
+    this.onViewEvents();
+  }
+
+  onViewEvents() {
     // CATCH MESSAGE
     this.craftSpaceView.on(
       Utility.eventMessages.CRAFTTABLE_DROP_ITEM,
@@ -64,6 +68,9 @@ class CraftSpaceController extends EventEmitter {
 
     // Catch item crafting
     this.craftSpaceView.on(Utility.eventMessages.CRAFT_ITEM, this.craftNewItem.bind(this));
+
+    // Catch recipe crafting
+    this.craftSpaceView.on(Utility.eventMessages.CRAFT_RECIPE, this.craftNewRecipe.bind(this));
 
     // Catch entity select (click on element)
     this.craftSpaceView.on(Utility.eventMessages.SELECT_ENTITY, this.selectEntity.bind(this));
@@ -114,10 +121,9 @@ class CraftSpaceController extends EventEmitter {
     return this.inventoryStorage.hasSameEntity(entity);
   }
 
-  // get recipes from craft table slot
-  // getRecipesFromCraftTableStorage() {
-  //   return this.craftTableStorage.getAll().filter(entity => entity.getType() === Recipe.TYPE);
-  // }
+  hasCraftTableStorage(entity) {
+    return this.craftTableStorage.hasSameEntity(entity);
+  }
 
   // get recipe from craft table slot
   getRecipeFromCraftTableStorage() {
@@ -208,32 +214,56 @@ class CraftSpaceController extends EventEmitter {
   // try to create new item with the help of recipe
   craftNewItem() {
     const recipe = this.getRecipeFromCraftTableStorage();
+    // there is recipe in craft slot
     if (!recipe) {
-      this.showMessage('Recipe is missing'); // !!! message
+      this.showMessage(Utility.UIMessages.RECIPE_MISSING);
       return;
     }
 
+    // does crafted item already exist
     const craftedItem = recipe.getCraftedItem();
     if (this.hasInventoryStorage(craftedItem)) {
-      this.showMessage('This item is already there!!'); // !!! message
+      this.showMessage(Utility.UIMessages.ITEM_ALREADY_EXISTS);
       return;
     }
 
+    // There are items in craft slot
     const items = this.getItemsFromCraftTableStorage();
     if (!(items && items.length > 0)) {
-      this.showMessage('Items are missing'); // !!! message
+      this.showMessage(Utility.UIMessages.ITEMS_MISSING);
       return;
     }
 
+    // match recipe checking
     const matchResult = recipe.match(...items);
     if (matchResult !== Recipe.MATCHING.MATCH) {
-      this.showMessage('Recipe is wrong!!'); // !!! ERROR message
-      // !!! clear craft table
+      this.showMessage(Utility.UIMessages.RECIPE_WRONG);
       return;
     }
+
+    // create new recipe
     this.addToInventoryNewEntity(recipe.getCraftedItem());
-    // !!! clear Craft table
-    this.showMessage('New item is created'); // !!! Info mess
+    this.showMessage(Utility.UIMessages.ITEM_CRAFTED);
+  }
+
+  // try to craft new recipe
+  craftNewRecipe(info) {
+    const items = this.getItemsFromCraftTableStorage();
+    if (!(items && items.length > 0)) {
+      this.showMessage(Utility.UIMessages.ITEMS_MISSING);
+      return;
+    }
+
+    // check existeed recipe (not only in inventory)
+    const newRecipe = new Recipe(new Item(info.name, info.description), ...items);
+    if (this.hasInventoryStorage(newRecipe) || this.hasCraftTableStorage(newRecipe)) {
+      this.showMessage(Utility.UIMessages.RECIPE_ALREADY_EXISTS);
+      return;
+    }
+
+    // craft new recipe
+    this.addToInventoryNewEntity(newRecipe);
+    this.showMessage(Utility.UIMessages.RECIPE_CRAFTED);
   }
 }
 
