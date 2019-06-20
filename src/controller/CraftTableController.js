@@ -12,55 +12,30 @@ class CraftSpaceController extends EventEmitter {
     this.craftTableStorage = new EntityStorage();
     this.craftSpaceView = new CraftSpaceView();
 
-    this.entityCategories = {
-      [`${Item.TYPE}`]: {
-        // Inventory
-        addToInventory: (...args) => {
-          this.craftSpaceView.addItem(...args);
-        },
-        deleteFromInventory: (...args) => {
-          this.craftSpaceView.deleteItem(...args);
-        },
-        // Craft table
-        deleteFromCraftTable: (...args) => {
-          this.craftSpaceView.deleteItem(...args);
-        },
-      },
-
-      [`${Recipe.TYPE}`]: {
-        addToInventory: (...args) => {
-          this.craftSpaceView.addRecipe(...args);
-        },
-        deleteFromInventory: (...args) => {
-          this.craftSpaceView.deleteRecipe(...args);
-        },
-        // Craft table
-        deleteFromCraftTable: (...args) => {
-          this.craftSpaceView.deleteRecipe(...args);
-        },
-      },
-    };
-
     this.onViewEvents();
   }
 
   onViewEvents() {
     // CATCH MESSAGE
+    // drop item on craft table
     this.craftSpaceView.on(
       Utility.eventMessages.CRAFTTABLE_DROP_ITEM,
       this.dropItemCraftTable.bind(this)
     );
 
+    // drop item on inventory
     this.craftSpaceView.on(
       Utility.eventMessages.INVENTORY_DROP_ITEM,
       this.dropItemInventory.bind(this)
     );
 
+    // drop recipe on craft table
     this.craftSpaceView.on(
       Utility.eventMessages.CRAFTTABLE_DROP_RECIPE,
       this.dropRecipeCraftTable.bind(this)
     );
 
+    // drop recipe on inventory
     this.craftSpaceView.on(
       Utility.eventMessages.INVENTORY_DROP_RECIPE,
       this.dropRecipeInventory.bind(this)
@@ -84,17 +59,23 @@ class CraftSpaceController extends EventEmitter {
 
   // add to inventory (view)
   addToInventory(entity) {
-    this.entityCategories[entity.getType()].addToInventory(entity);
+    const { type: entityType, id: entityId, name: entityName } = entity;
+    if (entityType === Item.TYPE) {
+      this.craftSpaceView.addItem(entityId, entityName);
+    } else if (entityType === Recipe.TYPE) {
+      this.craftSpaceView.addRecipe(entityId, entityName);
+    }
   }
 
+  // !! HELPER METHODS
   // add to inventory storage
   addToInventoryStorage(entity) {
     this.inventoryStorage.add(entity);
   }
 
   // delete from inventory (view)
-  deleteFromInventory(entity) {
-    this.entityCategories[entity.getType()].deleteFromInventory(entity);
+  deleteFromInventory({ id: entityId }) {
+    this.craftSpaceView.deleteById(entityId);
   }
 
   // delete from inventory storage
@@ -108,19 +89,21 @@ class CraftSpaceController extends EventEmitter {
   }
 
   // delete from craft table (view)
-  deleteFromCraftTable(entity) {
-    this.entityCategories[entity.getType()].deleteFromCraftTable(entity);
+  deleteFromCraftTable({ id: entityId }) {
+    this.craftSpaceView.deleteById(entityId);
   }
 
-  // delete from craft table (view)
+  // delete from craft table storage
   deleteFromCraftTableStorage(entity) {
     this.craftTableStorage.delete(entity);
   }
 
+  // check has storage same entity
   hasInventoryStorage(entity) {
     return this.inventoryStorage.hasSameEntity(entity);
   }
 
+  // check has storage same entity
   hasCraftTableStorage(entity) {
     return this.craftTableStorage.hasSameEntity(entity);
   }
@@ -191,6 +174,7 @@ class CraftSpaceController extends EventEmitter {
       this.addToInventory(oldRecipe);
     }
 
+    // delete from inventory -> add to craft table
     this.deleteFromInventoryStorage(entityOriginal);
     this.addToCraftTableStorage(entityOriginal);
   }
@@ -203,7 +187,7 @@ class CraftSpaceController extends EventEmitter {
     this.addToInventoryStorage(entity);
   }
 
-  // select entity
+  // select entity -> show description
   selectEntity(entityId) {
     const entity =
       this.inventoryStorage.findById(Number(entityId)) ||
@@ -255,7 +239,10 @@ class CraftSpaceController extends EventEmitter {
     }
 
     // check existeed recipe (not only in inventory)
-    const newRecipe = new Recipe(new Item(info.name, info.description), ...items);
+    const newRecipe = new Recipe(
+      new Item(Utility.nameFormat(info.name), info.description),
+      ...items
+    );
     if (this.hasInventoryStorage(newRecipe) || this.hasCraftTableStorage(newRecipe)) {
       this.showMessage(Utility.UIMessages.RECIPE_ALREADY_EXISTS);
       return;
