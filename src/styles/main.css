@@ -8,9 +8,9 @@ body {
 }
 
 main {
-  height: 810px;
+  /* height: 520px; */
   display: grid;
-  grid-template-columns: 400px 250px 400px;
+  grid-template-columns: 350px 350px 300px;
 }
 
 #inventory,
@@ -21,19 +21,21 @@ main {
 #inventory {
   display: grid;
   grid-template-columns: auto;
-  grid-template-rows: 80px 210px 80px auto;
+  /*grid-template-rows: 80px 120px 80px 245px;*/
+  grid-template-rows: 54px 26px 120px 26px 290px;
 }
 
 #tools {
   display: grid;
   grid-template-columns: auto;
-  grid-template-rows: 300px 200px 320px;
+  /* grid-template-rows: 210px 100px 220px; */
+  grid-template-rows: 200px 80px 200px;
 }
 
 #craft-table {
   display: grid;
   grid-template-columns: auto;
-  grid-template-rows: 54px 26px 210px 26px auto;
+  grid-template-rows: 54px 26px 120px 26px 290px;
 }
 
 .title > p {
@@ -112,7 +114,6 @@ button:active {
 }
 
 textarea#new-recipe-description,
-textarea#new-item-description,
 textarea#description-info {
   resize: none;
 }

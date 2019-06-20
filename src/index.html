@@ -9,15 +9,26 @@
   <body>
     <main>
       <div id="inventory">
-        <div class="title"><p>Recipes</p></div>
+        <div class="title"><p>Inventory</p></div>
+        <div class="subtitle"><p>Recipes</p></div>
         <div id="recipe-inventory" class="container"></div>
-        <div class="title"><p>Basic items</p></div>
+        <div class="subtitle"><p>Items</p></div>
         <div id="item-inventory" class="container"></div>
       </div>
 
+      <div id="craft-table">
+        <div class="title"><p>Crafting table</p></div>
+        <div class="subtitle"><p>Drag recipe here</p></div>
+        <div id="recipe-craft-table" class="container"></div>
+        <div class="subtitle"><p>Drag items here</p></div>
+        <div id="item-craft-table" class="container"></div>
+      </div>
+
       <div id="tools">
-        <div></div>
-        <!--space-->
+        <div class="craft-tool-container">
+          <div class="subtitle"><p>Description</p></div>
+          <textarea id="description-info" rows="7" readonly></textarea>
+        </div>
         <div class="craft-tool-container">
           <button id="btn-craft-item">Craft ITEM</button>
         </div>
@@ -30,26 +41,12 @@
             rows="4"
           ></textarea>
           <button id="btn-craft-recipe">Craft RECIPE</button>
-          <input id="new-item-name" type="text" placeholder="New item name" />
-          <textarea
-            id="new-item-description"
-            placeholder="New item description"
-            rows="4"
-          ></textarea>
         </div>
-      </div>
-
-      <div id="craft-table">
-        <div class="title"><p>Crafting table</p></div>
-        <div class="subtitle"><p>Drag recipe here</p></div>
-        <div id="recipe-craft-table" class="container"></div>
-        <div class="subtitle"><p>Drag items here</p></div>
-        <div id="item-craft-table" class="container"></div>
       </div>
     </main>
 
     <footer>
-      <div class="subtitle"><p>MESSAGES</p></div>
+      <div class="subtitle"><p>MESSAGES:</p></div>
       <textarea id="message-log" rows="4" cols="100"></textarea>
     </footer>
   </body>
