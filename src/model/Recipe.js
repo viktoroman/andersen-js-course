@@ -1,8 +1,8 @@
 import Entity from './Entity';
 
 class Recipe extends Entity {
-  constructor(name, description, craftedItem, ...components) {
-    super(Recipe.TYPE, name, description);
+  constructor(craftedItem, ...components) {
+    super(Recipe.TYPE, craftedItem.getName());
 
     this.craftedItem = craftedItem;
     this.components = components;
@@ -42,7 +42,7 @@ class Recipe extends Entity {
 
   getInformation() {
     return (str => str.slice(0, 1).toUpperCase() + str.slice(1))(
-      `${this.getType()}: ${this.getName()}. Components: ${this.getComponentsDescription()}. Description: ${this.getDescription()}.`
+      `${this.getType()}: ${this.getName()}. Components: ${this.getComponentsDescription()}. Description: ${this.craftedItem.getDescription()}.`
     );
   }
 
@@ -60,7 +60,6 @@ class Recipe extends Entity {
     );
 
     // missing items aren't exist, extra items aren't exist
-    // return [...comparisonResult.values()].every(value => value === 0);
     const res = Recipe.MATCHING.MATCH;
     return [...comparisonResult.values()].reduce((accum, value) => {
       let mtch = Recipe.MATCHING.MATCH;
@@ -77,14 +76,14 @@ class Recipe extends Entity {
   }
 
   clone() {
-    return new Recipe(this.name, this.description, this.craftedItem, ...this.components);
+    return new Recipe(...[this.craftedItem, ...this.components].map(item => item.clone()));
   }
 
   craft(...items) {
     if (!this.match(...items)) {
       return undefined;
     }
-    return this.craftedItem.clone();
+    return this.craftedItem();
   }
 }
 

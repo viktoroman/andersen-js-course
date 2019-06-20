@@ -2,11 +2,16 @@ import Entity from './Entity';
 
 class Item extends Entity {
   constructor(name, description) {
-    super(Item.TYPE, name, description);
+    super(Item.TYPE, name);
+    this.description = description;
   }
 
   static get TYPE() {
     return 'item';
+  }
+
+  getDescription() {
+    return this.description || 'unknown';
   }
 
   getInformation() {
