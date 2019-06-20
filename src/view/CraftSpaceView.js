@@ -117,9 +117,8 @@ class CraftSpaceView extends EventEmitter {
   }
 
   // !! ======================
-
   // create and add new Item
-  addItem({ id: entityId, name: entityName }) {
+  addItem(entityId, entityName) {
     const element = this.createElement({
       tag: 'div',
       attributes: {
@@ -143,7 +142,7 @@ class CraftSpaceView extends EventEmitter {
   }
 
   // create and add new Recipe
-  addRecipe({ id: entityId, name: entityName }) {
+  addRecipe(entityId, entityName) {
     const element = this.createElement({
       tag: 'div',
       attributes: {
@@ -166,26 +165,6 @@ class CraftSpaceView extends EventEmitter {
     this.appendEntity(this.recipeInventory, element);
   }
 
-  // delete Element-entity
-  deleteEntity({ id: entityId }) {
-    const elem = document.getElementById(entityId);
-    elem.parentNode.removeChild(elem);
-  }
-
-  deleteItem(item) {
-    this.deleteEntity(item);
-  }
-
-  deleteRecipe(recipe) {
-    this.deleteEntity(recipe);
-  }
-
-  // delete element with id
-  deleteById(id) {
-    const entityElement = document.getElementById(id);
-    entityElement.parentNode.removeChild(entityElement);
-  }
-
   // create new html-element with the help of properties
   createElement(props) {
     if (!(props && props.tag)) return undefined;
@@ -206,6 +185,12 @@ class CraftSpaceView extends EventEmitter {
   // append element to parent element
   appendEntity(parent, child) {
     parent.appendChild(child);
+  }
+
+  // delete element with id
+  deleteById(id) {
+    const entityElement = document.getElementById(id);
+    entityElement.parentNode.removeChild(entityElement);
   }
 
   // get id values of items of inventory container
@@ -232,7 +217,9 @@ class CraftSpaceView extends EventEmitter {
   // !!! MESSAGES
   // show message (Error, Info)
   showMessage(mess) {
-    this.messageField.textContent = `${Utility.timeNow()}| ${mess}`;
+    this.messageField.textContent = `${Utility.timeNow()}| ${mess}\n${
+      this.messageField.textContent
+    }`;
   }
 
   // show information (descrioption of entity)
