@@ -16,8 +16,6 @@ class CraftSpaceView extends EventEmitter {
 
     this.inputNewRecipeName = document.getElementById('new-recipe-name');
     this.inputNewRecipeDescr = document.getElementById('new-recipe-description');
-    this.inputNewItemName = document.getElementById('new-item-name');
-    this.inputNewItemDescr = document.getElementById('new-item-description');
 
     this.messageField = document.getElementById('message-log');
     this.descriptionField = document.getElementById('description-info');
@@ -66,7 +64,7 @@ class CraftSpaceView extends EventEmitter {
     this.btnCraftItem.addEventListener('click', this.handlerCraftNewItem.bind(this));
 
     // listener for button create recipe
-    // this.btnCraftRecipe.addEventListener('click', this.handlerCraftNewRecipe.bind(this));
+    this.btnCraftRecipe.addEventListener('click', this.handlerCraftNewRecipe.bind(this));
   }
 
   // !!! HANDLERS
@@ -92,9 +90,25 @@ class CraftSpaceView extends EventEmitter {
     this.emit(eventMessage, id);
   }
 
-  // create new item with the help of recipe
+  // craft new item with the help of recipe
   handlerCraftNewItem() {
     this.emit(Utility.eventMessages.CRAFT_ITEM);
+  }
+
+  // craft new recipe
+  handlerCraftNewRecipe() {
+    // get all information about a new crafting recipe
+    const info = {
+      name: this.inputNewRecipeName.value.trim(),
+      description: this.inputNewRecipeDescr.value.trim(),
+    };
+
+    if (!(Boolean(info.name) && Boolean(info.description))) {
+      this.showMessage(Utility.UIMessages.EMPTY_INPUTS); // UI message
+      return;
+    }
+
+    this.emit(Utility.eventMessages.CRAFT_RECIPE, info);
   }
 
   // select entity -> show description
@@ -103,6 +117,7 @@ class CraftSpaceView extends EventEmitter {
   }
 
   // !! ======================
+
   // create and add new Item
   addItem({ id: entityId, name: entityName }) {
     const element = this.createElement({
@@ -141,7 +156,6 @@ class CraftSpaceView extends EventEmitter {
         dragstart: ev => {
           this.handlerDragEntity(ev, this.CONSTANTS.TYPE_RECIPE);
         },
-        // click: ev => {
         mousedown: ev => {
           this.handlerSelectEntity(ev, Utility.eventMessages.SELECT_ENTITY);
         },
@@ -216,10 +230,8 @@ class CraftSpaceView extends EventEmitter {
   }
 
   // !!! MESSAGES
+  // show message (Error, Info)
   showMessage(mess) {
-    // this.messageField.textContent = `${Utility.timeNow()}| ${mess}\n${
-    //   this.messageField.textContent
-    // }`;
     this.messageField.textContent = `${Utility.timeNow()}| ${mess}`;
   }
 
