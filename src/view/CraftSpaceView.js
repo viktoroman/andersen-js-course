@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import EventEmitter from '../model/EventEmitter';
 import Utility from '../utility/Utility';
+import Helper from '../lib/Helper';
 
 class CraftSpaceView extends EventEmitter {
   constructor() {
@@ -20,13 +21,6 @@ class CraftSpaceView extends EventEmitter {
     this.messageField = document.getElementById('message-log');
     this.descriptionField = document.getElementById('description-info');
 
-    this.CONSTANTS = {
-      CLASS_ITEM: 'item',
-      CLASS_RECIPE: 'recipe',
-      TYPE_ITEM: 'item',
-      TYPE_RECIPE: 'recipe',
-    };
-
     this.init();
   }
 
@@ -34,29 +28,32 @@ class CraftSpaceView extends EventEmitter {
     // add listeners to containers
     [
       {
-        elem: this.itemInventory,
-        transferDataType: this.CONSTANTS.TYPE_ITEM,
+        parentElem: this.itemInventory,
+        transferDataType: Utility.entityConstants.TYPE_ITEM,
         eventMessage: Utility.eventMessages.INVENTORY_DROP_ITEM,
       },
       {
-        elem: this.recipeInventory,
-        transferDataType: this.CONSTANTS.TYPE_RECIPE,
+        parentElem: this.recipeInventory,
+        transferDataType: Utility.entityConstants.TYPE_RECIPE,
         eventMessage: Utility.eventMessages.INVENTORY_DROP_RECIPE,
       },
       {
-        elem: this.itemCraftTable,
-        transferDataType: this.CONSTANTS.TYPE_ITEM,
+        parentElem: this.itemCraftTable,
+        transferDataType: Utility.entityConstants.TYPE_ITEM,
         eventMessage: Utility.eventMessages.CRAFTTABLE_DROP_ITEM,
       },
       {
-        elem: this.recipeCraftTable,
-        transferDataType: this.CONSTANTS.TYPE_RECIPE,
+        parentElem: this.recipeCraftTable,
+        transferDataType: Utility.entityConstants.TYPE_RECIPE,
         eventMessage: Utility.eventMessages.CRAFTTABLE_DROP_RECIPE,
       },
-    ].forEach(({ elem, transferDataType, eventMessage }) => {
-      elem.addEventListener('dragover', this.handlerAllowDrop);
-      elem.addEventListener('drop', ev => {
-        this.handlerDropEntity(ev, elem, transferDataType, eventMessage);
+    ].forEach(({ parentElem, transferDataType, eventMessage }) => {
+      parentElem.addEventListener('dragover', Helper.allowDrop);
+      parentElem.addEventListener('drop', ev => {
+        const idEntity = ev.dataTransfer.getData(transferDataType);
+        Helper.dropEntity(ev, idEntity, parentElem);
+
+        this.emit(eventMessage, idEntity);
       });
     });
 
@@ -68,28 +65,6 @@ class CraftSpaceView extends EventEmitter {
   }
 
   // !!! HANDLERS
-  // allow drop into container
-  handlerAllowDrop(ev) {
-    ev.preventDefault();
-  }
-
-  // keep id of draggable element during dragging
-  handlerDragEntity(ev, transferDataType) {
-    ev.dataTransfer.setData(transferDataType, ev.target.id);
-  }
-
-  // append draggable element into container at the moment of dropping element
-  handlerDropEntity(ev, parent, transferDataType, eventMessage) {
-    ev.preventDefault();
-
-    const id = ev.dataTransfer.getData(transferDataType);
-    const item = document.getElementById(id);
-    if (!(item && parent)) return;
-    parent.appendChild(item);
-
-    this.emit(eventMessage, id);
-  }
-
   // craft new item with the help of recipe
   handlerCraftNewItem() {
     this.emit(Utility.eventMessages.CRAFT_ITEM);
@@ -119,72 +94,42 @@ class CraftSpaceView extends EventEmitter {
   // !! ======================
   // create and add new Item
   addItem(entityId, entityName) {
-    const element = this.createElement({
-      tag: 'div',
-      attributes: {
-        id: entityId,
-        class: this.CONSTANTS.CLASS_ITEM,
-        draggable: true,
-      },
-      textContent: entityName,
-      handles: {
-        dragstart: ev => {
-          this.handlerDragEntity(ev, this.CONSTANTS.TYPE_ITEM);
+    const element = Helper.createEntityElement(
+      Helper.getEntityElementProperties(
+        entityId,
+        entityName,
+        Utility.entityConstants.CLASS_ITEM,
+        ev => {
+          Helper.dragEntity(ev, Utility.entityConstants.TYPE_ITEM);
         },
-        mousedown: ev => {
+        ev => {
           this.handlerSelectEntity(ev, Utility.eventMessages.SELECT_ENTITY);
-        },
-      },
-    });
+        }
+      )
+    );
 
     if (!element) return;
-    this.appendEntity(this.itemInventory, element);
+    this.itemInventory.appendChild(element);
   }
 
   // create and add new Recipe
   addRecipe(entityId, entityName) {
-    const element = this.createElement({
-      tag: 'div',
-      attributes: {
-        id: entityId,
-        class: this.CONSTANTS.CLASS_RECIPE,
-        draggable: true,
-      },
-      textContent: entityName,
-      handles: {
-        dragstart: ev => {
-          this.handlerDragEntity(ev, this.CONSTANTS.TYPE_RECIPE);
+    const element = Helper.createEntityElement(
+      Helper.getEntityElementProperties(
+        entityId,
+        entityName,
+        Utility.entityConstants.CLASS_RECIPE,
+        ev => {
+          Helper.dragEntity(ev, Utility.entityConstants.TYPE_RECIPE);
         },
-        mousedown: ev => {
+        ev => {
           this.handlerSelectEntity(ev, Utility.eventMessages.SELECT_ENTITY);
-        },
-      },
-    });
+        }
+      )
+    );
 
     if (!element) return;
-    this.appendEntity(this.recipeInventory, element);
-  }
-
-  // create new html-element with the help of properties
-  createElement(props) {
-    if (!(props && props.tag)) return undefined;
-    const element = document.createElement(props.tag);
-    element.textContent = props.textContent;
-
-    Object.keys(props.attributes).forEach(attrName =>
-      element.setAttribute(attrName, props.attributes[attrName])
-    );
-
-    Object.keys(props.handles).forEach(handleName =>
-      element.addEventListener(handleName, props.handles[handleName])
-    );
-
-    return element;
-  }
-
-  // append element to parent element
-  appendEntity(parent, child) {
-    parent.appendChild(child);
+    this.recipeInventory.appendChild(element);
   }
 
   // delete element with id
@@ -195,29 +140,29 @@ class CraftSpaceView extends EventEmitter {
 
   // get id values of items of inventory container
   getInventoryItemsID() {
-    return [...this.itemInventory.querySelectorAll(`.${this.CONSTANTS.CLASS_ITEM}`)].map(elem =>
-      elem.getAttribute('id')
+    return [...this.itemInventory.querySelectorAll(`.${Utility.entityConstants.CLASS_ITEM}`)].map(
+      elem => elem.getAttribute('id')
     );
   }
 
   // get id values of items of craft table container
   getCraftTableItemsID() {
-    return [...this.itemCraftTable.querySelectorAll(`.${this.CONSTANTS.CLASS_ITEM}`)].map(elem =>
-      elem.getAttribute('id')
+    return [...this.itemCraftTable.querySelectorAll(`.${Utility.entityConstants.CLASS_ITEM}`)].map(
+      elem => elem.getAttribute('id')
     );
   }
 
   // get id values of recipes of craft table container
   getCraftTableRecipesID() {
-    return [...this.recipeCraftTable.querySelectorAll(`.${this.CONSTANTS.CLASS_RECIPE}`)].map(
-      elem => elem.getAttribute('id')
-    );
+    return [
+      ...this.recipeCraftTable.querySelectorAll(`.${Utility.entityConstants.CLASS_RECIPE}`),
+    ].map(elem => elem.getAttribute('id'));
   }
 
   // !!! MESSAGES
   // show message (Error, Info)
   showMessage(mess) {
-    this.messageField.textContent = `${Utility.timeNow()}| ${mess}\n${
+    this.messageField.textContent = `${Helper.timeNow()}| ${mess}\n${
       this.messageField.textContent
     }`;
   }

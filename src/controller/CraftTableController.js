@@ -1,6 +1,7 @@
 import EventEmitter from '../model/EventEmitter';
 import EntityStorage from '../model/EntityStorage';
 import Utility from '../utility/Utility';
+import Helper from '../lib/Helper';
 import CraftSpaceView from '../view/CraftSpaceView';
 import Item from '../model/Item';
 import Recipe from '../model/Recipe';
@@ -240,7 +241,7 @@ class CraftSpaceController extends EventEmitter {
 
     // check existeed recipe (not only in inventory)
     const newRecipe = new Recipe(
-      new Item(Utility.nameFormat(info.name), info.description),
+      new Item(Helper.nameFormat(info.name), info.description),
       ...items
     );
     if (this.hasInventoryStorage(newRecipe) || this.hasCraftTableStorage(newRecipe)) {

@@ -26,6 +26,14 @@ const Utility = (() => {
     RECIPE_CRAFTED: 'New recipe is created!!',
   };
 
+  // Entity constants
+  const utilityEntityConstants = {
+    CLASS_ITEM: 'item',
+    CLASS_RECIPE: 'recipe',
+    TYPE_ITEM: 'item',
+    TYPE_RECIPE: 'recipe',
+  };
+
   // set of
   const utilityDefaultEntities = {
     item: [
@@ -47,17 +55,9 @@ const Utility = (() => {
 
   return {
     eventMessages: utilityEventMessages,
+    entityConstants: utilityEntityConstants,
     defaultEntities: utilityDefaultEntities,
     UIMessages: utilityUIMessages,
-    timeNow: () => {
-      const d = new Date();
-      const addZero = v => (v < 10 ? '0' : '') + v;
-
-      const h = addZero(d.getHours());
-      const m = addZero(d.getMinutes());
-      const s = addZero(d.getSeconds());
-      return `${h}:${m}:${s}`;
-    },
   };
 })();
 
