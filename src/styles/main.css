@@ -83,7 +83,7 @@ button:active {
   background: lightgray; /*url("double-right.png");*/
   overflow: auto;
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: 50% 50%;
   align-content: start;
 }
 
@@ -92,10 +92,11 @@ button:active {
   justify-content: center;
   align-items: center;
   border: solid 1px white;
-  height: 40px;
+  min-height: 40px;
   background: sandybrown;
   color: white;
-  font-size: 20px;
+  /* font-size: 18px; */
+  font-size: 1.1em;
 }
 
 .item {
@@ -103,10 +104,10 @@ button:active {
   justify-content: center;
   align-items: center;
   border: solid 1px white;
-  height: 40px;
+  min-height: 40px;
   background: mediumslateblue;
   color: white;
-  font-size: 20px;
+  font-size: 1.1em;
 }
 
 #new-recipe-name::placeholder {
