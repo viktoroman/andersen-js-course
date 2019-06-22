@@ -1,6 +1,6 @@
 import EventEmitter from '../model/EventEmitter';
 import EntityStorage from '../model/EntityStorage';
-import Utility from '../utility/Utility';
+import PROJECT_CONST from '../lib/PROJECT_CONST';
 import Helper from '../lib/Helper';
 import CraftSpaceView from '../view/CraftSpaceView';
 import Item from '../model/Item';
@@ -20,41 +20,44 @@ class CraftSpaceController extends EventEmitter {
     // CATCH MESSAGE
     // drop item on craft table
     this.craftSpaceView.on(
-      Utility.eventMessages.CRAFTTABLE_DROP_ITEM,
+      PROJECT_CONST.eventMessages.CRAFTTABLE_DROP_ITEM,
       this.dropItemCraftTable.bind(this)
     );
 
     // drop item on inventory
     this.craftSpaceView.on(
-      Utility.eventMessages.INVENTORY_DROP_ITEM,
+      PROJECT_CONST.eventMessages.INVENTORY_DROP_ITEM,
       this.dropItemInventory.bind(this)
     );
 
     // drop recipe on craft table
     this.craftSpaceView.on(
-      Utility.eventMessages.CRAFTTABLE_DROP_RECIPE,
+      PROJECT_CONST.eventMessages.CRAFTTABLE_DROP_RECIPE,
       this.dropRecipeCraftTable.bind(this)
     );
 
     // drop recipe on inventory
     this.craftSpaceView.on(
-      Utility.eventMessages.INVENTORY_DROP_RECIPE,
+      PROJECT_CONST.eventMessages.INVENTORY_DROP_RECIPE,
       this.dropRecipeInventory.bind(this)
     );
 
     // Catch item crafting
-    this.craftSpaceView.on(Utility.eventMessages.CRAFT_ITEM, this.craftNewItem.bind(this));
+    this.craftSpaceView.on(PROJECT_CONST.eventMessages.CRAFT_ITEM, this.craftNewItem.bind(this));
 
     // Catch recipe crafting
-    this.craftSpaceView.on(Utility.eventMessages.CRAFT_RECIPE, this.craftNewRecipe.bind(this));
+    this.craftSpaceView.on(
+      PROJECT_CONST.eventMessages.CRAFT_RECIPE,
+      this.craftNewRecipe.bind(this)
+    );
 
     // Catch entity select (click on element)
-    this.craftSpaceView.on(Utility.eventMessages.SELECT_ENTITY, this.selectEntity.bind(this));
+    this.craftSpaceView.on(PROJECT_CONST.eventMessages.SELECT_ENTITY, this.selectEntity.bind(this));
   }
 
   initDefaultEntities() {
-    [...Utility.defaultEntities.item, ...Utility.defaultEntities.recipe].forEach(entity =>
-      this.addToInventoryNewEntity(entity.clone())
+    [...PROJECT_CONST.defaultEntities.item, ...PROJECT_CONST.defaultEntities.recipe].forEach(
+      entity => this.addToInventoryNewEntity(entity.clone())
     );
   }
 
@@ -201,41 +204,41 @@ class CraftSpaceController extends EventEmitter {
     const recipe = this.getRecipeFromCraftTableStorage();
     // there is recipe in craft slot
     if (!recipe) {
-      this.showMessage(Utility.UIMessages.RECIPE_MISSING);
+      this.showMessage(PROJECT_CONST.UIMessages.RECIPE_MISSING);
       return;
     }
 
     // does crafted item already exist
     const craftedItem = recipe.getCraftedItem();
     if (this.hasInventoryStorage(craftedItem)) {
-      this.showMessage(Utility.UIMessages.ITEM_ALREADY_EXISTS);
+      this.showMessage(PROJECT_CONST.UIMessages.ITEM_ALREADY_EXISTS);
       return;
     }
 
     // There are items in craft slot
     const items = this.getItemsFromCraftTableStorage();
     if (!(items && items.length > 0)) {
-      this.showMessage(Utility.UIMessages.ITEMS_MISSING);
+      this.showMessage(PROJECT_CONST.UIMessages.ITEMS_MISSING);
       return;
     }
 
     // match recipe checking
     const matchResult = recipe.match(...items);
     if (matchResult !== Recipe.MATCHING.MATCH) {
-      this.showMessage(Utility.UIMessages.RECIPE_WRONG);
+      this.showMessage(PROJECT_CONST.UIMessages.RECIPE_WRONG);
       return;
     }
 
     // create new recipe
     this.addToInventoryNewEntity(recipe.getCraftedItem());
-    this.showMessage(Utility.UIMessages.ITEM_CRAFTED);
+    this.showMessage(PROJECT_CONST.UIMessages.ITEM_CRAFTED);
   }
 
   // try to craft new recipe
   craftNewRecipe(info) {
     const items = this.getItemsFromCraftTableStorage();
     if (!(items && items.length > 0)) {
-      this.showMessage(Utility.UIMessages.ITEMS_MISSING);
+      this.showMessage(PROJECT_CONST.UIMessages.ITEMS_MISSING);
       return;
     }
 
@@ -245,13 +248,13 @@ class CraftSpaceController extends EventEmitter {
       ...items
     );
     if (this.hasInventoryStorage(newRecipe) || this.hasCraftTableStorage(newRecipe)) {
-      this.showMessage(Utility.UIMessages.RECIPE_ALREADY_EXISTS);
+      this.showMessage(PROJECT_CONST.UIMessages.RECIPE_ALREADY_EXISTS);
       return;
     }
 
     // craft new recipe
     this.addToInventoryNewEntity(newRecipe);
-    this.showMessage(Utility.UIMessages.RECIPE_CRAFTED);
+    this.showMessage(PROJECT_CONST.UIMessages.RECIPE_CRAFTED);
   }
 }
 

@@ -1,6 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import EventEmitter from '../model/EventEmitter';
-import Utility from '../utility/Utility';
+import PROJECT_CONST from '../lib/PROJECT_CONST';
 import Helper from '../lib/Helper';
 
 class CraftSpaceView extends EventEmitter {
@@ -29,23 +29,23 @@ class CraftSpaceView extends EventEmitter {
     [
       {
         parentElem: this.itemInventory,
-        transferDataType: Utility.entityConstants.TYPE_ITEM,
-        eventMessage: Utility.eventMessages.INVENTORY_DROP_ITEM,
+        transferDataType: PROJECT_CONST.entityConstants.TYPE_ITEM,
+        eventMessage: PROJECT_CONST.eventMessages.INVENTORY_DROP_ITEM,
       },
       {
         parentElem: this.recipeInventory,
-        transferDataType: Utility.entityConstants.TYPE_RECIPE,
-        eventMessage: Utility.eventMessages.INVENTORY_DROP_RECIPE,
+        transferDataType: PROJECT_CONST.entityConstants.TYPE_RECIPE,
+        eventMessage: PROJECT_CONST.eventMessages.INVENTORY_DROP_RECIPE,
       },
       {
         parentElem: this.itemCraftTable,
-        transferDataType: Utility.entityConstants.TYPE_ITEM,
-        eventMessage: Utility.eventMessages.CRAFTTABLE_DROP_ITEM,
+        transferDataType: PROJECT_CONST.entityConstants.TYPE_ITEM,
+        eventMessage: PROJECT_CONST.eventMessages.CRAFTTABLE_DROP_ITEM,
       },
       {
         parentElem: this.recipeCraftTable,
-        transferDataType: Utility.entityConstants.TYPE_RECIPE,
-        eventMessage: Utility.eventMessages.CRAFTTABLE_DROP_RECIPE,
+        transferDataType: PROJECT_CONST.entityConstants.TYPE_RECIPE,
+        eventMessage: PROJECT_CONST.eventMessages.CRAFTTABLE_DROP_RECIPE,
       },
     ].forEach(({ parentElem, transferDataType, eventMessage }) => {
       parentElem.addEventListener('dragover', Helper.allowDrop);
@@ -67,7 +67,7 @@ class CraftSpaceView extends EventEmitter {
   // !!! HANDLERS
   // craft new item with the help of recipe
   handlerCraftNewItem() {
-    this.emit(Utility.eventMessages.CRAFT_ITEM);
+    this.emit(PROJECT_CONST.eventMessages.CRAFT_ITEM);
   }
 
   // craft new recipe
@@ -79,11 +79,11 @@ class CraftSpaceView extends EventEmitter {
     };
 
     if (!(Boolean(info.name) && Boolean(info.description))) {
-      this.showMessage(Utility.UIMessages.EMPTY_INPUTS); // UI message
+      this.showMessage(PROJECT_CONST.UIMessages.EMPTY_INPUTS); // UI message
       return;
     }
 
-    this.emit(Utility.eventMessages.CRAFT_RECIPE, info);
+    this.emit(PROJECT_CONST.eventMessages.CRAFT_RECIPE, info);
   }
 
   // select entity -> show description
@@ -98,12 +98,12 @@ class CraftSpaceView extends EventEmitter {
       Helper.getEntityElementProperties(
         entityId,
         entityName,
-        Utility.entityConstants.CLASS_ITEM,
+        PROJECT_CONST.entityConstants.CLASS_ITEM,
         ev => {
-          Helper.dragEntity(ev, Utility.entityConstants.TYPE_ITEM);
+          Helper.dragEntity(ev, PROJECT_CONST.entityConstants.TYPE_ITEM);
         },
         ev => {
-          this.handlerSelectEntity(ev, Utility.eventMessages.SELECT_ENTITY);
+          this.handlerSelectEntity(ev, PROJECT_CONST.eventMessages.SELECT_ENTITY);
         }
       )
     );
@@ -118,12 +118,12 @@ class CraftSpaceView extends EventEmitter {
       Helper.getEntityElementProperties(
         entityId,
         entityName,
-        Utility.entityConstants.CLASS_RECIPE,
+        PROJECT_CONST.entityConstants.CLASS_RECIPE,
         ev => {
-          Helper.dragEntity(ev, Utility.entityConstants.TYPE_RECIPE);
+          Helper.dragEntity(ev, PROJECT_CONST.entityConstants.TYPE_RECIPE);
         },
         ev => {
-          this.handlerSelectEntity(ev, Utility.eventMessages.SELECT_ENTITY);
+          this.handlerSelectEntity(ev, PROJECT_CONST.eventMessages.SELECT_ENTITY);
         }
       )
     );
@@ -140,22 +140,22 @@ class CraftSpaceView extends EventEmitter {
 
   // get id values of items of inventory container
   getInventoryItemsID() {
-    return [...this.itemInventory.querySelectorAll(`.${Utility.entityConstants.CLASS_ITEM}`)].map(
-      elem => elem.getAttribute('id')
-    );
+    return [
+      ...this.itemInventory.querySelectorAll(`.${PROJECT_CONST.entityConstants.CLASS_ITEM}`),
+    ].map(elem => elem.getAttribute('id'));
   }
 
   // get id values of items of craft table container
   getCraftTableItemsID() {
-    return [...this.itemCraftTable.querySelectorAll(`.${Utility.entityConstants.CLASS_ITEM}`)].map(
-      elem => elem.getAttribute('id')
-    );
+    return [
+      ...this.itemCraftTable.querySelectorAll(`.${PROJECT_CONST.entityConstants.CLASS_ITEM}`),
+    ].map(elem => elem.getAttribute('id'));
   }
 
   // get id values of recipes of craft table container
   getCraftTableRecipesID() {
     return [
-      ...this.recipeCraftTable.querySelectorAll(`.${Utility.entityConstants.CLASS_RECIPE}`),
+      ...this.recipeCraftTable.querySelectorAll(`.${PROJECT_CONST.entityConstants.CLASS_RECIPE}`),
     ].map(elem => elem.getAttribute('id'));
   }
 
