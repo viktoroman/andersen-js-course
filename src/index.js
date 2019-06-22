@@ -1,3 +1,5 @@
 import './styles/main.css';
+import CraftSpaceController from './controller/CraftTableController';
 
-console.log('Hi');
+const craftSpaceController = new CraftSpaceController();
+craftSpaceController.initDefaultEntities();

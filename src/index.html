@@ -1,14 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Andersen JS Course</title>
   </head>
   <body>
-    <h1>
-      Andersen JS Course
-    </h1>
+    <main>
+      <div id="inventory">
+        <div class="title"><p>Inventory</p></div>
+        <div class="subtitle"><p>Recipes</p></div>
+        <div id="recipe-inventory" class="container"></div>
+        <div class="subtitle"><p>Items</p></div>
+        <div id="item-inventory" class="container"></div>
+      </div>
+
+      <div id="craft-table">
+        <div class="title"><p>Crafting table</p></div>
+        <div class="subtitle"><p>Drag recipe here</p></div>
+        <div id="recipe-craft-table" class="container"></div>
+        <div class="subtitle"><p>Drag items here</p></div>
+        <div id="item-craft-table" class="container"></div>
+      </div>
+
+      <div id="tools">
+        <div class="craft-tool-container">
+          <div class="subtitle"><p>Description</p></div>
+          <textarea id="description-info" rows="7" readonly></textarea>
+        </div>
+        <div class="craft-tool-container">
+          <button id="btn-craft-item">Craft ITEM</button>
+        </div>
+
+        <div class="craft-tool-container">
+          <input id="new-recipe-name" type="text" placeholder="New recipe name" />
+          <textarea
+            id="new-recipe-description"
+            placeholder="New recipe description"
+            rows="4"
+          ></textarea>
+          <button id="btn-craft-recipe">Craft RECIPE</button>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="subtitle"><p>MESSAGES:</p></div>
+      <textarea id="message-log" rows="4" cols="100"></textarea>
+    </footer>
   </body>
 </html>

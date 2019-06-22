@@ -1,8 +1,120 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
-h1 {
+main {
+  /* height: 520px; */
+  display: grid;
+  grid-template-columns: 350px 350px 300px;
+}
+
+#inventory,
+#craft-table {
+  border: solid 4px #a5a5a5;
+}
+
+#inventory {
+  display: grid;
+  grid-template-columns: auto;
+  /*grid-template-rows: 80px 120px 80px 245px;*/
+  grid-template-rows: 54px 26px 120px 26px 290px;
+}
+
+#tools {
+  display: grid;
+  grid-template-columns: auto;
+  /* grid-template-rows: 210px 100px 220px; */
+  grid-template-rows: 200px 80px 200px;
+}
+
+#craft-table {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: 54px 26px 120px 26px 290px;
+}
+
+.title > p {
+  font-size: 28px;
+  margin-bottom: 0;
   text-align: center;
+}
+.title {
+  align-self: end;
+}
+
+.subtitle > p {
+  font-size: 14px;
+  margin: 10px 0 0 10px;
+}
+
+.craft-tool-container {
+  border: solid rgb(190, 124, 0) 2px;
+  border-radius: 10px;
+  padding: 8px;
+  margin: 4px 2px;
+}
+
+.craft-tool-container > * {
+  margin: 4px 0;
+  width: 100%;
+}
+
+button {
+  height: 40px;
+  margin: 2px 4px;
+  border: solid 1px grey;
+  background-color: darkred;
+  color: white;
+  opacity: 0.8;
+}
+button:hover {
+  opacity: 0.9;
+}
+button:active {
+  opacity: 1;
+}
+
+.container {
+  background: lightgray; /*url("double-right.png");*/
+  overflow: auto;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  align-content: start;
+}
+
+.recipe {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: solid 1px white;
+  min-height: 40px;
+  background: sandybrown;
+  color: white;
+  /* font-size: 18px; */
+  font-size: 1.1em;
+}
+
+.item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: solid 1px white;
+  min-height: 40px;
+  background: mediumslateblue;
+  color: white;
+  font-size: 1.1em;
+}
+
+#new-recipe-name::placeholder {
+  opacity: 0.6;
+}
+
+textarea#new-recipe-description,
+textarea#description-info {
+  resize: none;
 }
