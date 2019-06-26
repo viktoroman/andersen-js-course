@@ -21,12 +21,10 @@ const getDataAllSequentail = urls => {
     .map(url => getData(url))
     .reduce((prevProm, currProm) => {
       return prevProm.then(data => {
-        if (data) {
-          res.push(data);
-        }
+        res.push(data);
         return currProm;
       });
-    }, Promise.resolve())
+    })
     .then(data => {
       res.push(data);
       console.log(res);
