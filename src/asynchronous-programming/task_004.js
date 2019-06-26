@@ -5,9 +5,8 @@ const getData = () => {
   fetch(URL_ACCESS)
     .then(response => response.json()) // get promise to get body of response
     .then(({ getUsersData: isAvailable }) => {
-      // reject
       if (!isAvailable) {
-        return Promise.reject(new Error(`Access data status: ${isAvailable}`));
+        return Promise.reject(new Error(`Access data status: ${isAvailable}`)); // reject
       }
       return fetch(URL_DATA);
     })

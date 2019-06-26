@@ -25,6 +25,7 @@ const getDataAllSequentail = urls => {
         return currProm;
       });
     })
+    // last item of array resolving
     .then(data => {
       res.push(data);
       console.log(res);
