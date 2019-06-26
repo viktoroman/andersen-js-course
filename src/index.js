@@ -8,6 +8,7 @@ import {
   getDataAllSequentail,
 } from './asynchronous-programming/task_005';
 import checkResolvedValue from './asynchronous-programming/task_006';
+import foo7 from './asynchronous-programming/task_007';
 
 console.log('task_001 =========================');
 foo(-10, createCb('value -10'));
@@ -32,3 +33,6 @@ getDataAllSequentail(urlsTask005);
 console.log('task_006 =========================');
 checkResolvedValue(500);
 // checkResolvedValue(200);
+
+console.log('task_006 =========================');
+foo7();
