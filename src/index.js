@@ -9,6 +9,7 @@ import {
 } from './asynchronous-programming/task_005';
 import checkResolvedValue from './asynchronous-programming/task_006';
 import foo7 from './asynchronous-programming/task_007';
+import foo8 from './asynchronous-programming/task_008';
 
 console.log('task_001 =========================');
 foo(-10, createCb('value -10'));
@@ -34,5 +35,9 @@ console.log('task_006 =========================');
 checkResolvedValue(500);
 // checkResolvedValue(200);
 
-console.log('task_006 =========================');
+console.log('task_007 =========================');
 foo7();
+
+console.log('task_008 =========================');
+foo8(`https://jsonplaceholder.typicode.com/users`);
+foo8(`htt://jsonplaceholder.typicode.com/users`);
