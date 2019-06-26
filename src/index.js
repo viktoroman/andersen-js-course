@@ -10,6 +10,7 @@ import {
 import checkResolvedValue from './asynchronous-programming/task_006';
 import foo7 from './asynchronous-programming/task_007';
 import foo8 from './asynchronous-programming/task_008';
+import foo9 from './asynchronous-programming/task_009';
 
 console.log('task_001 =========================');
 foo(-10, createCb('value -10'));
@@ -41,3 +42,6 @@ foo7();
 console.log('task_008 =========================');
 foo8(`https://jsonplaceholder.typicode.com/users`);
 foo8(`htt://jsonplaceholder.typicode.com/users`);
+
+console.log('task_009 =========================');
+foo9();
