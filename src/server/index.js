@@ -1,12 +1,13 @@
 import express from 'express';
 
+import GLOBAL from '../lib/GLOBAL';
+
 const app = express();
 
-app.get('/', (req, res) => {
+app.get('/ping', (req, res) => {
   res.send('Hello World');
 });
 
-app.listen(3000, async () => {
-  const a = await Promise.resolve(20);
-  console.log(`(TESTING) Server listening on PORT: 3000. ${a}`);
+app.listen(GLOBAL.SERVER_PORT, () => {
+  console.log(`Server listening on PORT: ${GLOBAL.SERVER_PORT}.`);
 });
