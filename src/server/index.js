@@ -5,6 +5,10 @@ import models, { connectDb } from './model/models';
 
 const app = express();
 
+// the body-parser middleware bundled with express
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
 // test ping !!! REMOVE AFTER
 app.get('/ping', (req, res) => {
   res.send('Hello World');
@@ -14,12 +18,55 @@ app.get('/ping', (req, res) => {
 app.get('/users', (req, res) => {
   models.User.find().exec((err, userData) => {
     if (err) {
-      throw err;
+      res.status(400).send(err);
+      console.log(err);
     }
-    res.send(userData);
+    res.status(200).send(userData);
   });
 });
 
+// insert new user
+app.post('/user', (req, res) => {
+  const newUser = new models.User(req.body);
+
+  newUser.save((err, savedObj) => {
+    if (err || !savedObj) {
+      const error = err || new Error('No object found');
+      res.status(400).send(error);
+      console.log(error);
+    }
+    res.status(200).send(savedObj);
+  });
+});
+
+// update
+app.put('/user', (req, res) => {
+  // const user = new models.User(req.body);
+  console.log(req.body);
+
+  models.User.findByIdAndUpdate(req.body.id, req.body, (err, updObj) => {
+    if (err || !updObj) {
+      const error = err || new Error('Object is not updated');
+      res.status(400).send(error);
+      console.log(error);
+    }
+    res.status(200).send(updObj);
+  });
+});
+
+// delete
+app.delete('/user/:id', (req, res) => {
+  models.User.findByIdAndDelete(req.params.id, (err, delObj) => {
+    if (err || !delObj) {
+      const error = err || new Error('Object is not deleted');
+      res.status(400).send(error);
+      console.log(error);
+    }
+    res.status(200).send();
+  });
+});
+
+// connect to DB and turn up listener
 connectDb().then(async () => {
   app.listen(GLOBAL.SERVER_PORT, () => {
     console.log(`Server listening on PORT: ${GLOBAL.SERVER_PORT}.`);
