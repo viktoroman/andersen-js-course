@@ -1,9 +1,11 @@
 import express from 'express';
+import cors from 'cors';
 
 import GLOBAL from '../lib/GLOBAL';
 import models, { connectDb } from './model/models';
 
 const app = express();
+app.use(cors());
 
 // the body-parser middleware bundled with express
 app.use(express.json());
@@ -42,7 +44,7 @@ app.post('/user', (req, res) => {
 // update
 app.put('/user', (req, res) => {
   // const user = new models.User(req.body);
-  console.log(req.body);
+  // console.log(req.body);
 
   models.User.findByIdAndUpdate(req.body.id, req.body, (err, updObj) => {
     if (err || !updObj) {
@@ -62,7 +64,7 @@ app.delete('/user/:id', (req, res) => {
       res.status(400).send(error);
       console.log(error);
     }
-    res.status(200).send();
+    res.status(200).send(delObj);
   });
 });
 

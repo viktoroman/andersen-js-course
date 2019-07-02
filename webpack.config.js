@@ -4,13 +4,15 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: 'development',
-  entry: './src/client/index.js',
+  entry: ['babel-polyfill', './src/client/index.js'],
   output: {
     filename: 'main.js',
     path: path.resolve(__dirname, 'dist'),
   },
   devServer: {
     contentBase: './dist',
+    port: 3001,
+    open: true,
   },
   module: {
     rules: [
@@ -44,4 +46,6 @@ module.exports = {
       template: 'src/client/index.html',
     }),
   ],
+
+  devtool: 'source-map',
 };
