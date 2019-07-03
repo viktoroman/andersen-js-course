@@ -17,7 +17,7 @@ app.get('/ping', (req, res) => {
 });
 
 // get all users
-app.get('/users', (req, res) => {
+app.get('/user/all', (req, res) => {
   models.User.find().exec((err, userData) => {
     if (err) {
       res.status(400).send(err);
