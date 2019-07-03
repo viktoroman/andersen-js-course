@@ -59,7 +59,9 @@ const UserService = (() => {
   // get all users
   const userGetAll = async () => {
     try {
-      return await CRUD.getAll(GLOBAL.USER_REST_ROOT_URL).map(v => new User(v));
+      // return await CRUD.getAll(`${GLOBAL.USER_REST_ROOT_URL}/all`).map(v => new User(v));
+      const result = await CRUD.getAll(`${GLOBAL.USER_REST_ROOT_URL}/all`);
+      return result.map(v => new User(v));
     } catch (error) {
       throw new Error(`Get all user error: ${error}`);
     }
