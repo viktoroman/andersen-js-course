@@ -33,7 +33,7 @@
         <div class="col-sm-9 overflow-auto">
           <table class="table">
             <thead>
-              <tr>
+              <tr class="user-record">
                 <th>Имя</th>
                 <th>Фамилия</th>
                 <th>Должность</th>
@@ -41,7 +41,7 @@
                 <th></th>
               </tr>
             </thead>
-            <tbody id="user-tbody">
+            <tbody id="userTbody">
               <tr>
                 <td>Mark</td>
                 <td>Otto</td>
@@ -67,18 +67,18 @@
           </table>
         </div>
         <div class="col-sm-3 col-5">
-          <form id="form-user">
+          <form id="formUser">
             <div class="form-group">
               <label>Имя сотрудника</label
-              ><input id="firstName" type="text" class="form-control" />
+              ><input id="firstName" type="text" class="form-control" required />
               <label>Фамилия сотрудника</label
-              ><input id="lastName" type="text" class="form-control" />
+              ><input id="lastName" type="text" class="form-control" required />
               <label>Должность сотрудника</label
-              ><input id="position" type="text" class="form-control" />
+              ><input id="position" type="text" class="form-control" required />
             </div>
-            <button type="submit" class="btn btn-primary">ADD</button>
+            <button id="btnAddUser" type="submit" class="btn btn-primary">ADD</button>
             <button type="submit" class="btn btn-warning">UPDATE</button>
-            <button id="btn-test" type="submit" class="btn btn-info">TEST</button>
+            <!--button id="btnTest" type="submit" class="btn btn-info">TEST</button-->
           </form>
         </div>
       </div>
