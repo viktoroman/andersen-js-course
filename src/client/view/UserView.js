@@ -6,9 +6,13 @@ import Helper from '../../lib/Helper';
 class UserView extends EventEmitter {
   constructor() {
     super();
-    this.userTable = document.getElementById('user-tbody');
-    this.form = document.getElementById('form-user');
-    this.btnTEST = document.getElementById('btn-test');
+    this.userTable = document.getElementById('userTbody');
+    this.form = document.getElementById('formUser');
+    this.formUserFN = document.getElementById('firstName');
+    this.formUserLN = document.getElementById('lastName');
+    this.formUserPosition = document.getElementById('position');
+
+    this.btnAdd = document.getElementById('btnAddUser');
 
     this.init();
   }
@@ -22,13 +26,31 @@ class UserView extends EventEmitter {
       ev.preventDefault();
     });
 
-    this.btnTEST.addEventListener('click', ev => {
-      this.addUserTEST(ev);
+    this.btnAdd.addEventListener('click', () => {
+      this.handleAddUser();
     });
   }
 
-  addUserTEST() {
-    console.log('TEST click!');
+  // !!! handles
+  handlerSelectRecord(element) {
+    // handlerSelectRecord(ev) {
+    // const elementID = ev.target.id;
+    if (!element) {
+      return;
+    }
+
+    const fields = Helper.getFieldValues(element);
+    this.emit(GLOBAL.EVENT_MESS.SELECT_RECORD, fields);
+  }
+
+  handleAddUser() {
+    const fields = {
+      firstName: this.formUserFN.value.trim(),
+      lastName: this.formUserLN.value.trim(),
+      position: this.formUserPosition.value.trim(),
+    };
+
+    this.emit(GLOBAL.EVENT_MESS.ADD_USER, fields);
   }
 
   // refresh table
@@ -41,10 +63,14 @@ class UserView extends EventEmitter {
     Helper.removeChildren(this.userTable);
   }
 
+  // add user record on page
   addUser(user) {
     const element = Helper.getDefaultUserRecord(user, () => {
-      console.log('Delete');
-    }); // !!! Add listener
+      console.log('Delete'); // !!! Add listener
+    });
+    element.addEventListener('mousedown', () => {
+      this.handlerSelectRecord(element);
+    });
     this.userTable.appendChild(element);
   }
 }

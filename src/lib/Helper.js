@@ -1,3 +1,5 @@
+import GLOBAL from './GLOBAL';
+
 const Helper = (() => {
   // remove all children of DOM element
   function removeChildrenHelper(elem) {
@@ -32,10 +34,10 @@ const Helper = (() => {
 
     // cells
     const tdElements = [
-      { tag: 'td', attr: { class: 'first-name' }, text: userFirstName },
-      { tag: 'td', attr: { class: 'last-name' }, text: userLastName },
-      { tag: 'td', attr: { class: 'position' }, text: userPosition },
-      { tag: 'td', attr: { class: 'changeDate' }, text: userDateChange },
+      { tag: 'td', attr: { class: GLOBAL.CLASSES.USER_FN }, text: userFirstName },
+      { tag: 'td', attr: { class: GLOBAL.CLASSES.USER_LN }, text: userLastName },
+      { tag: 'td', attr: { class: GLOBAL.CLASSES.USER_POSITION }, text: userPosition },
+      { tag: 'td', attr: { class: GLOBAL.CLASSES.USER_DATE }, text: userDateChange },
     ].map(({ tag, attr, text }) => {
       const elem = getSimpleElement(tag, attr);
       elem.textContent = text;
@@ -61,10 +63,29 @@ const Helper = (() => {
     }, trElement);
   }
 
+  // get field values from TR element - user record
+  function getFieldValuesHelper(element) {
+    const tdElements = Array.from(element.querySelectorAll('td')).reduce(
+      (accum, { className: classElement, textContent: valueContent }) => {
+        return Object.assign(accum, { [classElement]: valueContent });
+      },
+      {}
+    );
+
+    return {
+      id: element.id,
+      firstName: tdElements[GLOBAL.CLASSES.USER_FN].trim(),
+      lastName: tdElements[GLOBAL.CLASSES.USER_LN].trim(),
+      position: tdElements[GLOBAL.CLASSES.USER_POSITION].trim(),
+      dateChange: tdElements[GLOBAL.CLASSES.USER_DATE].trim(),
+    };
+  }
+
   // final set
   return {
     removeChildren: removeChildrenHelper,
     getDefaultUserRecord: getDefaultUserRecordHelper,
+    getFieldValues: getFieldValuesHelper,
   };
 })();
 

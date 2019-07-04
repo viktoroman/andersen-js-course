@@ -9,6 +9,15 @@ const GLOBAL = (() => {
 
   const eventMess = {
     GET_ALL: 'GET_ALL',
+    ADD_USER: 'ADD_USER',
+    SELECT_RECORD: 'SELECT_RECORD',
+  };
+
+  const classes = {
+    USER_FN: 'first-name',
+    USER_LN: 'last-name',
+    USER_POSITION: 'position',
+    USER_DATE: 'change-date',
   };
 
   return {
@@ -19,6 +28,7 @@ const GLOBAL = (() => {
     COLLECTION_USERS: mongoDbCollectionNameUser,
 
     EVENT_MESS: eventMess,
+    CLASSES: classes,
   };
 })();
 
