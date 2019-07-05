@@ -23,6 +23,7 @@ const GLOBAL = (() => {
     USER_LN: 'last-name',
     USER_POSITION: 'position',
     USER_DATE: 'change-date',
+    USER_SELECTED: 'selected',
   };
 
   const status = {

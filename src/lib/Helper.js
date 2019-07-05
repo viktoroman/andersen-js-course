@@ -88,12 +88,19 @@ const Helper = (() => {
     return alertBox;
   }
 
+  // remove element by ID
+  function removeUserRecordHelper(id) {
+    const elem = document.getElementById(id);
+    elem.parentElement.removeChild(elem);
+  }
+
   // final set
   return {
     removeChildren: removeChildrenHelper,
     getDefaultUserRecord: getDefaultUserRecordHelper,
     getValuesRecord: getValuesRecordHelper,
     createAlertBox: createAlertBoxHelper,
+    removeUserRecord: removeUserRecordHelper,
   };
 })();
 

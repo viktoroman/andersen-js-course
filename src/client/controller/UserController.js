@@ -56,7 +56,7 @@ class UserController {
           this.userView.addUser(user);
         });
       })
-      .catch(err => console.log(err));
+      .catch(err => this.userView.showAlert(err.message));
   }
 
   // add new user
@@ -65,13 +65,13 @@ class UserController {
       .then(insData => {
         this.userView.addUser(insData);
       })
-      .catch(err => console.log(err));
+      .catch(err => this.userView.showAlert(err.message));
   }
 
   // update user
   updateUser(user) {
     if (!this.userView.currentSelectedRecord) {
-      console.log('Choose element!!');
+      this.userView.showAlert('Choose element!!');
       return;
     }
     const updatedUser = new User(Helper.getValuesRecord(this.userView.currentSelectedRecord));
@@ -81,21 +81,21 @@ class UserController {
       .then(() => {
         this.userView.replaceCurrentUser(updatedUser);
       })
-      .catch(err => console.log(err));
+      .catch(err => this.userView.showAlert(err.message));
   }
 
   // delete user
   deleteUser(userId) {
     if (!userId) {
-      console.log('Cannot remove!!');
+      this.userView.showAlert('Cannot remove!!');
       return;
     }
     UserService.deleteById(userId)
       .then(() => {
-        this.userView.removeUserRecord(userId);
+        Helper.removeUserRecord(userId);
         this.clearForm();
       })
-      .catch(err => console.log(err));
+      .catch(err => this.userView.showAlert(err.message));
   }
 
   // fill form inputs

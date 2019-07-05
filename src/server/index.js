@@ -28,6 +28,6 @@ app.delete(`${GLOBAL.USER_ROOT_PATH}/:id`, deleteById);
 // connect to DB and turn up listener
 connectDb().then(async () => {
   app.listen(GLOBAL.SERVER_PORT, () => {
-    console.log(`Server listening on PORT: ${GLOBAL.SERVER_PORT}.`);
+    // console.log(`Server listening on PORT: ${GLOBAL.SERVER_PORT}.`);
   });
 });

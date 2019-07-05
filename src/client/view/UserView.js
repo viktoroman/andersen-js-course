@@ -2,7 +2,6 @@ import EventEmitter from '../model/EventEmitter';
 import GLOBAL from '../../lib/GLOBAL';
 import Helper from '../../lib/Helper';
 
-/* eslint-disable class-methods-use-this */
 class UserView extends EventEmitter {
   constructor() {
     super();
@@ -16,7 +15,6 @@ class UserView extends EventEmitter {
 
     this.btnAdd = document.getElementById('btnAddUser');
     this.btnUpdate = document.getElementById('btnUpdateUser');
-    this.btnTEST = document.getElementById('btnTest');
 
     this.alertContainer = document.getElementById('alertContainer');
 
@@ -45,59 +43,27 @@ class UserView extends EventEmitter {
       }
       this.handlerUpdateUser();
     });
-
-    this.btnTEST.addEventListener('click', () => {
-      this.showAlert('TEST Alert!!!');
-    });
   }
 
   // !!! handles
   // select record
   handlerSelectRecord(element) {
-    // handlerSelectRecord(ev) {
-    // const elementID = ev.target.id;
     if (!element) {
       return;
     }
     this.selectRecord(element);
-
-    // const fields = Helper.getFieldValues(element);
     this.emit(GLOBAL.EVENT_MESS.SELECT_RECORD, element);
   }
 
   // add user handler
   handlerAddUser() {
-    // !!! fields getting - to other method
-    const fields = {
-      firstName: this.formUserFN.value.trim(),
-      lastName: this.formUserLN.value.trim(),
-      position: this.formUserPosition.value.trim(),
-    };
-
+    const fields = this.getFormFields();
     this.emit(GLOBAL.EVENT_MESS.ADD_USER, fields);
   }
 
   // update current selected user
   handlerUpdateUser() {
-    // const fields = {
-    //   id: this.selectRecord.id,
-    //   dateChange: new Date(),
-    // };
-
-    // // !!! fields getting - to other method
-    // const formfields = {
-    //   firstName: this.formUserFN.value.trim(),
-    //   lastName: this.formUserLN.value.trim(),
-    //   position: this.formUserPosition.value.trim(),
-    // };
-
-    // Object.assign(fields, formfields);
-
-    const fields = {
-      firstName: this.formUserFN.value.trim(),
-      lastName: this.formUserLN.value.trim(),
-      position: this.formUserPosition.value.trim(),
-    };
+    const fields = this.getFormFields();
     this.emit(GLOBAL.EVENT_MESS.UPDATE_USER, fields);
   }
 
@@ -106,15 +72,21 @@ class UserView extends EventEmitter {
   }
 
   // !!! METHODS
+  getFormFields() {
+    return {
+      firstName: this.formUserFN.value.trim(),
+      lastName: this.formUserLN.value.trim(),
+      position: this.formUserPosition.value.trim(),
+    };
+  }
+
   // select record
   selectRecord(elem) {
-    const CLASS_SELECTED = 'selected'; // !!! to GLOBAL
-
     if (this.currentSelectedRecord) {
-      this.currentSelectedRecord.classList.remove(CLASS_SELECTED);
+      this.currentSelectedRecord.classList.remove(GLOBAL.CLASSES.USER_SELECTED);
     }
     this.currentSelectedRecord = elem;
-    this.currentSelectedRecord.classList.add(CLASS_SELECTED);
+    this.currentSelectedRecord.classList.add(GLOBAL.CLASSES.USER_SELECTED);
   }
 
   // refresh table
@@ -127,8 +99,8 @@ class UserView extends EventEmitter {
     Helper.removeChildren(this.userTable);
   }
 
-  // add user record on page
-  addUser(fields) {
+  // create user record
+  createUserRecord(fields) {
     const element = Helper.getDefaultUserRecord(
       fields,
       this.handlerDeleteUser.bind(this, fields.id)
@@ -136,28 +108,22 @@ class UserView extends EventEmitter {
     element.addEventListener('mousedown', () => {
       this.handlerSelectRecord(element);
     });
+    return element;
+  }
+
+  // add user record on page
+  addUser(fields) {
+    const element = this.createUserRecord(fields);
     this.userTable.appendChild(element);
   }
 
   // replace current record
   replaceCurrentUser(fields) {
-    // !!! to other method
-    const element = Helper.getDefaultUserRecord(fields, () => {
-      console.log('Delete'); // !!! Add listener on del button
-    });
-    element.addEventListener('mousedown', () => {
-      this.handlerSelectRecord(element);
-    });
+    const element = this.createUserRecord(fields);
 
     const replacedRecord = this.currentSelectedRecord;
     this.selectRecord(element);
     this.userTable.replaceChild(this.currentSelectedRecord, replacedRecord);
-  }
-
-  // remove element by ID
-  removeUserRecord(id) {
-    const elem = document.getElementById(id);
-    elem.parentElement.removeChild(elem);
   }
 
   // alert
@@ -166,7 +132,7 @@ class UserView extends EventEmitter {
     this.alertContainer.appendChild(elem);
     setTimeout(() => {
       elem.parentElement.removeChild(elem);
-    }, 3000);
+    }, 5000);
   }
 }
 
