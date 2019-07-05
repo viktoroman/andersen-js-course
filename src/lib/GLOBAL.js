@@ -10,6 +10,7 @@ const GLOBAL = (() => {
   const eventMess = {
     GET_ALL: 'GET_ALL',
     ADD_USER: 'ADD_USER',
+    UPDATE_USER: 'UPDATE_USER',
     SELECT_RECORD: 'SELECT_RECORD',
   };
 

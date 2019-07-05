@@ -2,12 +2,13 @@ import UserView from '../view/UserView';
 import GLOBAL from '../../lib/GLOBAL';
 import UserService from '../service/UserService';
 import User from '../model/User';
+import Helper from '../../lib/Helper';
 // import User from '../model/User';
 
 class UserController {
   constructor() {
     this.userView = new UserView();
-    this.currentUser = new User({ id: 0 }); // "empty" object
+    // this.currentUser = new User({ id: 0 }); // "empty" object
 
     this.onUserViewEmitter();
 
@@ -23,13 +24,20 @@ class UserController {
 
     // add
     this.userView.on(GLOBAL.EVENT_MESS.ADD_USER, userFields => {
-      this.addUser(userFields);
+      const user = new User(userFields);
+      user.dateChange = new Date();
+      this.addUser(user);
+    });
+
+    // update
+    this.userView.on(GLOBAL.EVENT_MESS.UPDATE_USER, userFields => {
+      this.updateUser(userFields);
     });
 
     // select (mousedown) record
-    this.userView.on(GLOBAL.EVENT_MESS.SELECT_RECORD, userFields => {
-      this.currentUser = new User(userFields);
-      this.fillForm(this.currentUser);
+    this.userView.on(GLOBAL.EVENT_MESS.SELECT_RECORD, elementRecord => {
+      // this.currentUser = new User(userFields);
+      this.fillForm(new User(Helper.getValuesRecord(elementRecord)));
     });
   }
 
@@ -47,12 +55,22 @@ class UserController {
   }
 
   // add new user
-  addUser(fields) {
-    const user = new User(fields);
-    user.dateChange = new Date();
+  addUser(user) {
     UserService.insert(user)
       .then(insData => {
         this.userView.addUser(insData);
+      })
+      .catch(err => console.log(err));
+  }
+
+  // update user
+  updateUser(user) {
+    const updatedUser = new User(Helper.getValuesRecord(this.userView.currentSelectedRecord));
+    updatedUser.updateFields(user);
+    updatedUser.dateChange = new Date().toISOString();
+    UserService.update(updatedUser)
+      .then(() => {
+        this.userView.replaceCurrentUser(updatedUser);
       })
       .catch(err => console.log(err));
   }
