@@ -11,6 +11,7 @@ const GLOBAL = (() => {
     GET_ALL: 'GET_ALL',
     ADD_USER: 'ADD_USER',
     UPDATE_USER: 'UPDATE_USER',
+    DELETE_USER: 'DELETE_USER',
     SELECT_RECORD: 'SELECT_RECORD',
   };
 

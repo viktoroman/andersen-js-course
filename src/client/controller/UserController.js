@@ -34,6 +34,11 @@ class UserController {
       this.updateUser(userFields);
     });
 
+    // delete
+    this.userView.on(GLOBAL.EVENT_MESS.DELETE_USER, userId => {
+      this.deleteUser(userId);
+    });
+
     // select (mousedown) record
     this.userView.on(GLOBAL.EVENT_MESS.SELECT_RECORD, elementRecord => {
       // this.currentUser = new User(userFields);
@@ -65,6 +70,10 @@ class UserController {
 
   // update user
   updateUser(user) {
+    if (!this.userView.currentSelectedRecord) {
+      console.log('Choose element!!');
+      return;
+    }
     const updatedUser = new User(Helper.getValuesRecord(this.userView.currentSelectedRecord));
     updatedUser.updateFields(user);
     updatedUser.dateChange = new Date().toISOString();
@@ -75,11 +84,35 @@ class UserController {
       .catch(err => console.log(err));
   }
 
+  // delete user
+  deleteUser(userId) {
+    if (!userId) {
+      console.log('Cannot remove!!');
+      return;
+    }
+    UserService.deleteById(userId)
+      .then(() => {
+        this.userView.removeUserRecord(userId);
+        this.clearForm();
+      })
+      .catch(err => console.log(err));
+  }
+
   // fill form inputs
   fillForm(user) {
     this.userView.formUserFN.value = user.firstName;
     this.userView.formUserLN.value = user.lastName;
     this.userView.formUserPosition.value = user.position;
+  }
+
+  // clear form
+  clearForm() {
+    [this.userView.formUserFN, this.userView.formUserLN, this.userView.formUserPosition].forEach(
+      e => {
+        const elem = e;
+        elem.value = '';
+      }
+    );
   }
 }
 

@@ -81,11 +81,19 @@ const Helper = (() => {
     };
   }
 
+  // create message box
+  function createAlertBoxHelper(message) {
+    const alertBox = getSimpleElement('div', { class: 'alert alert-danger', role: 'alert' });
+    alertBox.textContent = message;
+    return alertBox;
+  }
+
   // final set
   return {
     removeChildren: removeChildrenHelper,
     getDefaultUserRecord: getDefaultUserRecordHelper,
     getValuesRecord: getValuesRecordHelper,
+    createAlertBox: createAlertBoxHelper,
   };
 })();
 

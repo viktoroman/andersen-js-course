@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 
 import GLOBAL from '../lib/GLOBAL';
-import models, { connectDb } from './model/models';
+import Models, { connectDb } from './model/Models';
 
 const app = express();
 app.use(cors());
@@ -18,7 +18,7 @@ app.get('/ping', (req, res) => {
 
 // get all users
 app.get('/user/all', (req, res) => {
-  models.User.find().exec((err, userData) => {
+  Models.User.find().exec((err, userData) => {
     if (err) {
       res.status(400).send(err);
       console.log(err);
@@ -29,7 +29,7 @@ app.get('/user/all', (req, res) => {
 
 // insert new user
 app.post('/user', (req, res) => {
-  const newUser = new models.User(req.body);
+  const newUser = new Models.User(req.body);
 
   newUser.save((err, savedObj) => {
     if (err || !savedObj) {
@@ -43,10 +43,10 @@ app.post('/user', (req, res) => {
 
 // update
 app.put('/user', (req, res) => {
-  // const user = new models.User(req.body);
+  // const user = new Models.User(req.body);
   // console.log(req.body);
 
-  models.User.findByIdAndUpdate(req.body.id, req.body, (err, updObj) => {
+  Models.User.findByIdAndUpdate(req.body.id, req.body, (err, updObj) => {
     if (err || !updObj) {
       const error = err || new Error('Object is not updated');
       res.status(400).send(error);
@@ -58,7 +58,7 @@ app.put('/user', (req, res) => {
 
 // delete
 app.delete('/user/:id', (req, res) => {
-  models.User.findByIdAndDelete(req.params.id, (err, delObj) => {
+  Models.User.findByIdAndDelete(req.params.id, (err, delObj) => {
     if (err || !delObj) {
       const error = err || new Error('Object is not deleted');
       res.status(400).send(error);

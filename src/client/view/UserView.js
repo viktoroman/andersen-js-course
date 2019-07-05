@@ -16,6 +16,9 @@ class UserView extends EventEmitter {
 
     this.btnAdd = document.getElementById('btnAddUser');
     this.btnUpdate = document.getElementById('btnUpdateUser');
+    this.btnTEST = document.getElementById('btnTest');
+
+    this.alertContainer = document.getElementById('alertContainer');
 
     this.init();
   }
@@ -30,11 +33,21 @@ class UserView extends EventEmitter {
     });
 
     this.btnAdd.addEventListener('click', () => {
+      if (!this.form.checkValidity()) {
+        return;
+      }
       this.handlerAddUser();
     });
 
     this.btnUpdate.addEventListener('click', () => {
+      if (!this.form.checkValidity()) {
+        return;
+      }
       this.handlerUpdateUser();
+    });
+
+    this.btnTEST.addEventListener('click', () => {
+      this.showAlert('TEST Alert!!!');
     });
   }
 
@@ -88,6 +101,11 @@ class UserView extends EventEmitter {
     this.emit(GLOBAL.EVENT_MESS.UPDATE_USER, fields);
   }
 
+  handlerDeleteUser(id) {
+    this.emit(GLOBAL.EVENT_MESS.DELETE_USER, id);
+  }
+
+  // !!! METHODS
   // select record
   selectRecord(elem) {
     const CLASS_SELECTED = 'selected'; // !!! to GLOBAL
@@ -110,10 +128,11 @@ class UserView extends EventEmitter {
   }
 
   // add user record on page
-  addUser(user) {
-    const element = Helper.getDefaultUserRecord(user, () => {
-      console.log('Delete'); // !!! Add listener on del button
-    });
+  addUser(fields) {
+    const element = Helper.getDefaultUserRecord(
+      fields,
+      this.handlerDeleteUser.bind(this, fields.id)
+    );
     element.addEventListener('mousedown', () => {
       this.handlerSelectRecord(element);
     });
@@ -121,9 +140,9 @@ class UserView extends EventEmitter {
   }
 
   // replace current record
-  replaceCurrentUser(user) {
+  replaceCurrentUser(fields) {
     // !!! to other method
-    const element = Helper.getDefaultUserRecord(user, () => {
+    const element = Helper.getDefaultUserRecord(fields, () => {
       console.log('Delete'); // !!! Add listener on del button
     });
     element.addEventListener('mousedown', () => {
@@ -133,6 +152,21 @@ class UserView extends EventEmitter {
     const replacedRecord = this.currentSelectedRecord;
     this.selectRecord(element);
     this.userTable.replaceChild(this.currentSelectedRecord, replacedRecord);
+  }
+
+  // remove element by ID
+  removeUserRecord(id) {
+    const elem = document.getElementById(id);
+    elem.parentElement.removeChild(elem);
+  }
+
+  // alert
+  showAlert(message) {
+    const elem = Helper.createAlertBox(message);
+    this.alertContainer.appendChild(elem);
+    setTimeout(() => {
+      elem.parentElement.removeChild(elem);
+    }, 3000);
   }
 }
 
