@@ -2,7 +2,9 @@ import express from 'express';
 import cors from 'cors';
 
 import GLOBAL from '../lib/GLOBAL';
-import Models, { connectDb } from './model/Models';
+import { connectDb } from './model/Models';
+
+import { getAll, insert, update, deleteById } from './service/UserService';
 
 const app = express();
 app.use(cors());
@@ -11,62 +13,17 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// test ping !!! REMOVE AFTER
-app.get('/ping', (req, res) => {
-  res.send('Hello World');
-});
-
 // get all users
-app.get('/user/all', (req, res) => {
-  Models.User.find().exec((err, userData) => {
-    if (err) {
-      res.status(400).send(err);
-      console.log(err);
-    }
-    res.status(200).send(userData);
-  });
-});
+app.get(`${GLOBAL.USER_ROOT_PATH}/all`, getAll);
 
 // insert new user
-app.post('/user', (req, res) => {
-  const newUser = new Models.User(req.body);
-
-  newUser.save((err, savedObj) => {
-    if (err || !savedObj) {
-      const error = err || new Error('No object found');
-      res.status(400).send(error);
-      console.log(error);
-    }
-    res.status(200).send(savedObj);
-  });
-});
+app.post(GLOBAL.USER_ROOT_PATH, insert);
 
 // update
-app.put('/user', (req, res) => {
-  // const user = new Models.User(req.body);
-  // console.log(req.body);
-
-  Models.User.findByIdAndUpdate(req.body.id, req.body, (err, updObj) => {
-    if (err || !updObj) {
-      const error = err || new Error('Object is not updated');
-      res.status(400).send(error);
-      console.log(error);
-    }
-    res.status(200).send(updObj);
-  });
-});
+app.put(GLOBAL.USER_ROOT_PATH, update);
 
 // delete
-app.delete('/user/:id', (req, res) => {
-  Models.User.findByIdAndDelete(req.params.id, (err, delObj) => {
-    if (err || !delObj) {
-      const error = err || new Error('Object is not deleted');
-      res.status(400).send(error);
-      console.log(error);
-    }
-    res.status(200).send(delObj);
-  });
-});
+app.delete(`${GLOBAL.USER_ROOT_PATH}/:id`, deleteById);
 
 // connect to DB and turn up listener
 connectDb().then(async () => {
