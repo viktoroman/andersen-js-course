@@ -14,3 +14,14 @@ h1 {
 #userTbody tr.selected {
   background-color: rgb(97, 159, 231);
 }
+
+#alertContainer {
+  align-content: center;
+  width: 100%;
+  position: fixed;
+  bottom: 10px;
+}
+
+#alertContainer .alert {
+  margin: 4px 10% 4px 10%;
+}
