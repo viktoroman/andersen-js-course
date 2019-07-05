@@ -64,7 +64,7 @@ const Helper = (() => {
   }
 
   // get field values from TR element - user record
-  function getFieldValuesHelper(element) {
+  function getValuesRecordHelper(element) {
     const tdElements = Array.from(element.querySelectorAll('td')).reduce(
       (accum, { className: classElement, textContent: valueContent }) => {
         return Object.assign(accum, { [classElement]: valueContent });
@@ -85,7 +85,7 @@ const Helper = (() => {
   return {
     removeChildren: removeChildrenHelper,
     getDefaultUserRecord: getDefaultUserRecordHelper,
-    getFieldValues: getFieldValuesHelper,
+    getValuesRecord: getValuesRecordHelper,
   };
 })();
 
