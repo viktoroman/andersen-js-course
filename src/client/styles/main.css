@@ -8,5 +8,9 @@ h1 {
 }
 
 #userTbody tr:hover {
-  background-color: rgb(141, 189, 238);
+  background-color: rgb(191, 222, 253);
+}
+
+#userTbody tr.selected {
+  background-color: rgb(97, 159, 231);
 }
