@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Andersen JS Course</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header clearfix">
+        <h3 class="text-muted">Сотрудники</h3>
+      </div>
+    </div>
+    <!-- /container -->
+    <hr />
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-9 overflow-auto">
+          <table class="table">
+            <thead>
+              <tr class="user-record">
+                <th>Имя</th>
+                <th>Фамилия</th>
+                <th>Должность</th>
+                <th>Изменено</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="userTbody"></tbody>
+          </table>
+        </div>
+        <div class="col-sm-3 col-5">
+          <form id="formUser">
+            <div class="form-group">
+              <label>Имя сотрудника</label
+              ><input id="firstName" type="text" class="form-control" required />
+              <label>Фамилия сотрудника</label
+              ><input id="lastName" type="text" class="form-control" required />
+              <label>Должность сотрудника</label
+              ><input id="position" type="text" class="form-control" required />
+            </div>
+            <button id="btnAddUser" type="submit" class="btn btn-primary">ADD</button>
+            <button id="btnUpdateUser" type="submit" class="btn btn-warning">UPDATE</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- /container -->
+    <hr />
+
+    <div id="alertContainer"></div>
+  </body>
+</html>
