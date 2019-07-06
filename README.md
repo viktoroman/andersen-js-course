@@ -32,8 +32,9 @@
 6. npm install bootstrap --save
 
 Для запуска использовать команды:
-yarn start-server
-yarn start-client
+
+1. сервер: yarn start-server
+2. клиент: yarn start-client
 
 Для дебага серверной части использовать команду:
 yarn start-server-debug
